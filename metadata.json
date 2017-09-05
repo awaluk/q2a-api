@@ -1,0 +1,12 @@
+{
+    "name": "Q2A API",
+    "uri": "",
+    "description": "Simple API serving data from Q2A in JSON",
+    "version": "1.0",
+    "date": "2017-09-01",
+    "author": "Arkadiusz Waluk",
+    "author_uri": "http://waluk.pl",
+    "license": "MIT",
+    "min_q2a": "1.5",
+    "update_uri": ""
+}
