@@ -1,10 +1,4 @@
 <?php
-/**
-* Q2A API - plugin to Question2Answer
-* @author Arkadiusz Waluk <arkadiusz@waluk.pl>
-*/
-
-define('API_URL', 'api/');
 
 function return_json_response($data, $code = 200)
 {

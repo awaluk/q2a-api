@@ -1,21 +1,17 @@
 <?php
-/**
- * Q2A API - plugin to Question2Answer
- * @author Arkadiusz Waluk <arkadiusz@waluk.pl>
- */
 
 class api_favorites
 {
     public function match_request($request)
     {
-        return $request === API_URL.'favorites';
+        return $request === API_URL . 'favorites';
     }
 
     public function process_request()
     {
         $user_id = qa_get_logged_in_userid();
         if (empty($user_id)) {
-            return_json_response(['error' => 'User not logged']);
+            return_json_response(['error' => qa_lang('q2a_api/user_not_logged')]);
         }
 
         $db_questions = qa_db_select_with_pending(qa_db_user_favorite_qs_selectspec($user_id));
