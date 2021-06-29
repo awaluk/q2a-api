@@ -10,12 +10,4 @@ Clone or download this repository or selected [release](https://github.com/awalu
  
 ## Available endpoints
 
-- **/api/favorites** - get favorites data for logged user: users, questions, tags and categories
-    ```json
-    {
-        "questions": ["2", "1"],
-        "users": ["Example username"],
-        "tags": ["Example tag 1", "Example tag 2"],
-        "categories": ["Example category"]
-    }
-    ```
+Look to documentation in OpenAPI standard inside `docs/` directory.

@@ -19,8 +19,5 @@ if (!defined('QA_VERSION')) {
     exit();
 }
 
-define('API_URL', 'api/');
-qa_register_plugin_module('page', 'src/api-favorites.php', 'api_favorites', 'API favorites');
+qa_register_plugin_module('page', 'qa-page.php', 'api_page', 'API page');
 qa_register_plugin_phrases('lang/*.php', 'q2a_api');
-
-require_once 'src/api-functions.php';
