@@ -1,5 +1,7 @@
 <?php
 
 return [
-    'user_not_logged' => 'User not logged'
+    'response_unauthorized' => 'Unauthorized',
+    'response_not_found' => 'Not found',
+    'response_internal_server_error' => 'Server error',
 ];

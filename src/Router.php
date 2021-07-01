@@ -6,12 +6,16 @@ class Router
 {
     public function match(string $url): array
     {
+        if ($url === 'categories') {
+            return $this->getParams('CategoriesController::list');
+        }
+
         if (!qa_is_logged_in()) {
-            throw new HttpException('Unauthorized', Response::STATUS_UNAUTHORIZED);
+            throw new HttpException(qa_lang('q2a_api/response_unauthorized'), Response::STATUS_UNAUTHORIZED);
         }
 
         if ($url === 'account') {
-            return $this->getParams('AccountController::user');
+            return $this->getParams('AccountController::accounts');
         }
         if ($url === 'favourites') {
             return $this->getParams('AccountController::favourites');
@@ -22,7 +26,7 @@ class Router
 
     private function getParams(string $action): array
     {
-        [$controller, $method] = explode('::', $action);
+        list($controller, $method) = explode('::', $action);
 
         return [
             "{$controller}.php", // file

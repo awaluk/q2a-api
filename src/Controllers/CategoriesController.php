@@ -1,0 +1,38 @@
+<?php
+
+namespace Q2aApi;
+
+class CategoriesController extends AbstractController
+{
+    public function list(): Response
+    {
+        $categories = qa_db_read_all_assoc(qa_db_query_sub('SELECT * FROM ^categories ORDER BY `position`'));
+        $categoriesTree = $this->getCategoriesForGroup($categories);
+
+        return $this->json(['data' => $categoriesTree]);
+    }
+
+    private function getCategoriesForGroup(array $categories, int $parentId = null): array
+    {
+        $filtered = array_filter($categories, function ($category) use ($parentId) {
+            return ($parentId === null && $category['parentid'] === null) || $parentId === (int)$category['parentid'];
+        });
+        $filtered = array_map(function ($category) {
+            return [
+                'id' => (int)$category['categoryid'],
+                'title' => $category['title'],
+                'slug' => $category['tags'],
+                'path' => $category['backpath'],
+                'description' => $category['content'],
+                'position' => (int)$category['position'],
+                'questions_count' => (int)$category['qcount'],
+            ];
+        }, $filtered);
+
+        foreach ($filtered as &$category) {
+            $category['subcategories'] = $this->getCategoriesForGroup($categories, $category['id']);
+        }
+
+        return array_values($filtered);
+    }
+}

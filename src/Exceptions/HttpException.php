@@ -13,12 +13,8 @@ class HttpException extends \Exception
         parent::__construct($message);
     }
 
-    public function getJsonResponse()
+    public function getJsonResponse(): JsonResponse
     {
-        return new Response(
-            json_encode(['message' => $this->message]),
-            $this->status,
-            ['Content-Type: application/json']
-        );
+        return new JsonResponse(['message' => $this->message], $this->status);
     }
 }

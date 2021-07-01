@@ -6,6 +6,6 @@ class NotFoundHttpException extends HttpException
 {
     public function __construct()
     {
-        parent::__construct('Not found', Response::STATUS_NOT_FOUND);
+        parent::__construct(qa_lang('q2a_api/response_not_found'), Response::STATUS_NOT_FOUND);
     }
 }
