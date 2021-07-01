@@ -21,6 +21,7 @@ class AccountController extends AbstractController
 
         $dbQuestions = qa_db_select_with_pending(qa_db_user_favorite_qs_selectspec($userId));
         $questions = array_column($dbQuestions, 'postid');
+        $questions = array_map('intval', $questions);
 
         $dbUsers = qa_db_select_with_pending(qa_db_user_favorite_users_selectspec($userId));
         $users = array_column($dbUsers, 'handle');

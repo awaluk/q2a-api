@@ -3,8 +3,8 @@
 /*
     Plugin Name: Q2A API
     Plugin URI: https://github.com/awaluk/q2a-api
-    Plugin Description: Creates simple API and serve some data as JSON
-    Plugin Version: 0.1.0
+    Plugin Description: Adds simple API to serve some data as JSON
+    Plugin Version: 0.2.0
     Plugin Date: 2020-08-29
     Plugin Author: Arkadiusz Waluk
     Plugin Author URI: https://waluk.pl

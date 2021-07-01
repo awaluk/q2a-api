@@ -18,7 +18,7 @@ class Router
         }
 
         if ($url === 'account') {
-            return $this->getParams('AccountController::accounts');
+            return $this->getParams('AccountController::account');
         }
         if ($url === 'favourites') {
             return $this->getParams('AccountController::favourites');

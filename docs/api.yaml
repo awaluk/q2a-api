@@ -1,0 +1,222 @@
+openapi: 3.0.3
+info:
+  title: Q2A API
+  description: 'The plugin adds simple API to serve some data as JSON. Here is documentation for endpoints. Currently plugin supports user authentication only via Q2A session mechanism.'
+  contact:
+    name: GitHub issues
+    url: https://github.com/awaluk/q2a-api/issues
+  license:
+    name: MIT
+    url: https://github.com/awaluk/q2a-api/blob/master/LICENSE
+  version: 0.2.0
+externalDocs:
+  description: GitHub repository
+  url: https://github.com/awaluk/q2a-api
+servers:
+  - url: /api
+tags:
+  - name: Account
+  - name: Category
+  - name: General
+paths:
+  /account:
+    get:
+      tags:
+        - Account
+      summary: Get logged in user data
+      operationId: getAccountData
+      security:
+        - q2aSession: []
+      responses:
+        200:
+          description: User data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      handle:
+                        type: string
+                        example: user1
+                        description: Username
+                      email:
+                        type: string
+                        example: user1@example.com
+                      level:
+                        $ref: '#/components/schemas/UserLevel'
+                      points:
+                        type: integer
+                        example: 200
+        401:
+          description: Unauthorized
+  /favourites:
+    get:
+      tags:
+        - Account
+      summary: Get favourite items for logged in user
+      operationId: getAccountFavourites
+      security:
+        - q2aSession: []
+      responses:
+        200:
+          description: User favourite items
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      questions:
+                        type: array
+                        description: Array of favourite questions
+                        items:
+                          type: integer
+                          example: 1
+                          description: User id
+                      users:
+                        type: array
+                        description: Array of favourite users
+                        items:
+                          type: string
+                          example: user1
+                          description: User handle (username)
+                      tags:
+                        type: array
+                        description: Array of favourite tags
+                        items:
+                          type: string
+                          example: tag-1
+                          description: Tag name
+                      categories:
+                        type: array
+                        description: Array of favourite categories
+                        items:
+                          type: string
+                          example: Category 1
+                          description: Category name
+        401:
+          description: Unauthorized
+  /categories:
+    get:
+      tags:
+        - Category
+      summary: Get list of categories
+      operationId: getCategoriesList
+      responses:
+        200:
+          description: List of categories
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        title:
+                          type: string
+                          example: Category 1
+                        slug:
+                          type: string
+                          example: category-1
+                        path:
+                          type: string
+                          example: category-1
+                        description:
+                          type: string
+                          example: Category description
+                        questions_count:
+                          type: integer
+                          example: 3
+                        subcategories:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                example: 2
+                              title:
+                                type: string
+                                example: Category 2
+                              slug:
+                                type: string
+                                example: category-2
+                              path:
+                                type: string
+                                example: category-1/category-2
+                              description:
+                                type: string
+                                example: Category description
+                              questions_count:
+                                type: integer
+                                example: 1
+                              subcategories:
+                                type: array
+                                items:
+                                  type: object
+                                example: []
+  /statistics:
+    get:
+      tags:
+        - General
+      summary: Get some general statistics
+      description: '4 counters: questions, answers, comments, users'
+      operationId: getStatistics
+      responses:
+        200:
+          description: Statistics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        questions_count:
+                          type: integer
+                          example: 5
+                        answers_count:
+                          type: integer
+                          example: 7
+                        comments_count:
+                          type: integer
+                          example: 3
+                        users_count:
+                          type: integer
+                          example: 6
+components:
+  schemas:
+    UserLevel:
+      type: integer
+      enum: [0, 10, 20, 50, 80, 100, 120]
+      description: >
+        Defines the user role/function:
+          - `0` - no role, standard user
+          - `10` - approved user (only when users approval is enabled in Q2A)
+          - `20` - expert
+          - `50` - editor
+          - `80` - moderator
+          - `100` - admin
+          - `120` - super admin
+  securitySchemes:
+    q2aSession:
+      type: apiKey
+      in: cookie
+      name: PHPSESSID
