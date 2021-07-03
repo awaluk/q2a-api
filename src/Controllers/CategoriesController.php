@@ -25,7 +25,7 @@ class CategoriesController extends AbstractController
                 'path' => $category['backpath'],
                 'description' => $category['content'],
                 'position' => (int)$category['position'],
-                'questions_count' => (int)$category['qcount'],
+                'questionsCount' => (int)$category['qcount'],
             ];
         }, $filtered);
 

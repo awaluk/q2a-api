@@ -138,7 +138,7 @@ paths:
                         description:
                           type: string
                           example: Category description
-                        questions_count:
+                        questionsCount:
                           type: integer
                           example: 3
                         subcategories:
@@ -161,7 +161,7 @@ paths:
                               description:
                                 type: string
                                 example: Category description
-                              questions_count:
+                              questionsCount:
                                 type: integer
                                 example: 1
                               subcategories:
@@ -185,22 +185,20 @@ paths:
                 type: object
                 properties:
                   data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        questions_count:
-                          type: integer
-                          example: 5
-                        answers_count:
-                          type: integer
-                          example: 7
-                        comments_count:
-                          type: integer
-                          example: 3
-                        users_count:
-                          type: integer
-                          example: 6
+                    type: object
+                    properties:
+                      questionsCount:
+                        type: integer
+                        example: 5
+                      answersCount:
+                        type: integer
+                        example: 7
+                      commentsCount:
+                        type: integer
+                        example: 3
+                      usersCount:
+                        type: integer
+                        example: 6
 components:
   schemas:
     UserLevel:
