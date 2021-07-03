@@ -40,6 +40,9 @@ class api_page
         foreach ($response->getHeaders() as $header) {
             header($header);
         }
+        if (!empty(qa_opt('api_cors_origin'))) {
+            header('Access-Control-Allow-Origin: ' . qa_opt('api_cors_origin'));
+        }
         echo $response->getBody();
     }
 }
