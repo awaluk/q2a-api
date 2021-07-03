@@ -199,6 +199,13 @@ paths:
                       usersCount:
                         type: integer
                         example: 6
+                    required:
+                      - questionsCount
+                      - answersCount
+                      - commentsCount
+                      - usersCount
+                required:
+                  - data
 components:
   schemas:
     UserLevel:
