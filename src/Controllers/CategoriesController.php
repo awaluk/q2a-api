@@ -9,7 +9,7 @@ class CategoriesController extends AbstractController
         $categories = qa_db_read_all_assoc(qa_db_query_sub('SELECT * FROM ^categories ORDER BY `position`'));
         $categoriesTree = $this->getCategoriesForGroup($categories);
 
-        return $this->json(['data' => $categoriesTree]);
+        return $this->json($categoriesTree);
     }
 
     private function getCategoriesForGroup(array $categories, int $parentId = null): array

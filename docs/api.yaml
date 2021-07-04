@@ -177,6 +177,9 @@ components:
           description:
             type: string
             example: "Category description"
+          position:
+            type: integer
+            example: 1
           questionsCount:
             type: integer
             example: 3

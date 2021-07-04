@@ -6,13 +6,13 @@ class AccountController extends AbstractController
 {
     public function account(): Response
     {
-        return $this->json(['data' => [
+        return $this->json([
             'id' => (int)qa_get_logged_in_userid(),
             'handle' => qa_get_logged_in_handle(),
             'email' => qa_get_logged_in_email(),
             'level' => (int)qa_get_logged_in_level(),
             'points' => (int)qa_get_logged_in_points(),
-        ]]);
+        ]);
     }
 
     public function favourites(): Response
