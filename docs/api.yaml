@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Q2A API
-  description: 'The plugin adds simple API to serve some data as JSON. Here is documentation for endpoints. Currently plugin supports user authentication only via Q2A session mechanism.'
+  description: "The plugin adds simple API to serve some data as JSON. Here is documentation for endpoints. Currently plugin supports user authentication only via Q2A session mechanism."
   contact:
     name: GitHub issues
     url: https://github.com/awaluk/q2a-api/issues
@@ -9,15 +9,19 @@ info:
     name: MIT
     url: https://github.com/awaluk/q2a-api/blob/master/LICENSE
   version: 0.2.0
+
 externalDocs:
   description: GitHub repository
   url: https://github.com/awaluk/q2a-api
+
 servers:
   - url: /api
+
 tags:
   - name: Account
   - name: Category
   - name: General
+
 paths:
   /account:
     get:
@@ -33,28 +37,11 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      id:
-                        type: integer
-                        example: 1
-                      handle:
-                        type: string
-                        example: user1
-                        description: Username
-                      email:
-                        type: string
-                        example: user1@example.com
-                      level:
-                        $ref: '#/components/schemas/UserLevel'
-                      points:
-                        type: integer
-                        example: 200
+                $ref: "#/components/schemas/AccountDto"
+
         401:
           description: Unauthorized
+
   /favourites:
     get:
       tags:
@@ -69,41 +56,10 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      questions:
-                        type: array
-                        description: Array of favourite questions
-                        items:
-                          type: integer
-                          example: 1
-                          description: User id
-                      users:
-                        type: array
-                        description: Array of favourite users
-                        items:
-                          type: string
-                          example: user1
-                          description: User handle (username)
-                      tags:
-                        type: array
-                        description: Array of favourite tags
-                        items:
-                          type: string
-                          example: tag-1
-                          description: Tag name
-                      categories:
-                        type: array
-                        description: Array of favourite categories
-                        items:
-                          type: string
-                          example: Category 1
-                          description: Category name
+                $ref: "#/components/schemas/FavouritesDto"
         401:
           description: Unauthorized
+
   /categories:
     get:
       tags:
@@ -116,65 +72,14 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                          example: 1
-                        title:
-                          type: string
-                          example: Category 1
-                        slug:
-                          type: string
-                          example: category-1
-                        path:
-                          type: string
-                          example: category-1
-                        description:
-                          type: string
-                          example: Category description
-                        questionsCount:
-                          type: integer
-                          example: 3
-                        subcategories:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              id:
-                                type: integer
-                                example: 2
-                              title:
-                                type: string
-                                example: Category 2
-                              slug:
-                                type: string
-                                example: category-2
-                              path:
-                                type: string
-                                example: category-1/category-2
-                              description:
-                                type: string
-                                example: Category description
-                              questionsCount:
-                                type: integer
-                                example: 1
-                              subcategories:
-                                type: array
-                                items:
-                                  type: object
-                                example: []
+                $ref: "#/components/schemas/CategoriesDto"
+
   /statistics:
     get:
       tags:
         - General
       summary: Get some general statistics
-      description: '4 counters: questions, answers, comments, users'
+      description: "4 counters: questions, answers, comments, users"
       operationId: getStatistics
       responses:
         200:
@@ -182,33 +87,11 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      questionsCount:
-                        type: integer
-                        example: 5
-                      answersCount:
-                        type: integer
-                        example: 7
-                      commentsCount:
-                        type: integer
-                        example: 3
-                      usersCount:
-                        type: integer
-                        example: 6
-                    required:
-                      - questionsCount
-                      - answersCount
-                      - commentsCount
-                      - usersCount
-                required:
-                  - data
+                $ref: "#/components/schemas/StatisticsDto"
+
 components:
   schemas:
-    UserLevel:
+    UserLevelDto:
       type: integer
       enum: [0, 10, 20, 50, 80, 100, 120]
       description: >
@@ -220,6 +103,123 @@ components:
           - `80` - moderator
           - `100` - admin
           - `120` - super admin
+
+    AccountDto:
+      type: object
+      required:
+        - id
+        - handle
+        - email
+        - level
+        - points
+      properties:
+        id:
+          type: integer
+          example: 1
+        handle:
+          type: string
+          example: user1
+          description: "Username"
+        email:
+          type: string
+          example: "user1@example.com"
+        level:
+          $ref: "#/components/schemas/UserLevelDto"
+        points:
+          type: integer
+          example: 200
+
+    StatisticsDto:
+      type: object
+      required:
+        - questionsCount
+        - answersCount
+        - commentsCount
+        - usersCount
+      properties:
+        questionsCount:
+          type: integer
+          example: 5
+        answersCount:
+          type: integer
+          example: 7
+        commentsCount:
+          type: integer
+          example: 3
+        usersCount:
+          type: integer
+          example: 6
+
+    CategoriesDto:
+      type: array
+      items:
+        required:
+          - id
+          - title
+          - slug
+          - path
+          - description
+          - subcategories
+          - questionsCount
+        properties:
+          id:
+            type: integer
+            example: 1
+          title:
+            type: string
+            example: "Category 1"
+          slug:
+            type: string
+            example: "category-1"
+          path:
+            type: string
+            example: "category-1"
+          description:
+            type: string
+            example: "Category description"
+          questionsCount:
+            type: integer
+            example: 3
+          subcategories:
+            $ref: "#/components/schemas/Categories"
+
+    FavouritesDto:
+      type: object
+      required:
+        - questions
+        - users
+        - tags
+        - categories
+      properties:
+        questions:
+          type: array
+          description: "Array of favourite questions"
+          items:
+            type: integer
+            example: 1
+            description: User id
+        users:
+          type: array
+          description: "Array of favourite users"
+          items:
+            type: string
+            example: user1
+            description: User handle (username)
+        tags:
+          type: array
+          description: "Array of favourite tags"
+          items:
+            type: string
+            example: "tag-1"
+            description: "Tag name"
+        categories:
+          type: array
+          description: "Array of favourite categories"
+          items:
+            type: string
+            example: "Category 1"
+            description: "Category name"
+
   securitySchemes:
     q2aSession:
       type: apiKey
