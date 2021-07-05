@@ -72,7 +72,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CategoriesDto"
+                type: array
+                items:
+                  $ref: "#/components/schemas/CategoryDto"
 
   /statistics:
     get:
@@ -150,41 +152,41 @@ components:
           type: integer
           example: 6
 
-    CategoriesDto:
-      type: array
-      items:
-        required:
-          - id
-          - title
-          - slug
-          - path
-          - description
-          - subcategories
-          - questionsCount
-        properties:
-          id:
-            type: integer
-            example: 1
-          title:
-            type: string
-            example: "Category 1"
-          slug:
-            type: string
-            example: "category-1"
-          path:
-            type: string
-            example: "category-1"
-          description:
-            type: string
-            example: "Category description"
-          position:
-            type: integer
-            example: 1
-          questionsCount:
-            type: integer
-            example: 3
-          subcategories:
-            $ref: "#/components/schemas/Categories"
+    CategoryDto:
+      required:
+        - id
+        - title
+        - slug
+        - path
+        - description
+        - subcategories
+        - questionsCount
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: "Category 1"
+        slug:
+          type: string
+          example: "category-1"
+        path:
+          type: string
+          example: "category-1"
+        description:
+          type: string
+          example: "Category description"
+        position:
+          type: integer
+          example: 1
+        questionsCount:
+          type: integer
+          example: 3
+        subcategories:
+          type: array
+          items: 
+            $ref: "#/components/schemas/CategoryDto"
 
     FavouritesDto:
       type: object
