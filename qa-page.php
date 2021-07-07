@@ -43,6 +43,7 @@ class api_page
         if (!empty(qa_opt('api_cors_origin'))) {
             header('Access-Control-Allow-Origin: ' . qa_opt('api_cors_origin'));
         }
+        header('Access-Control-Allow-Credentials: true');
         echo $response->getBody();
     }
 }
