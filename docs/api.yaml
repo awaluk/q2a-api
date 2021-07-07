@@ -110,7 +110,7 @@ components:
       type: object
       required:
         - id
-        - handle
+        - name
         - email
         - level
         - points
@@ -118,7 +118,7 @@ components:
         id:
           type: integer
           example: 1
-        handle:
+        name:
           type: string
           example: user1
           description: "Username"
@@ -185,7 +185,7 @@ components:
           example: 3
         subcategories:
           type: array
-          items: 
+          items:
             $ref: "#/components/schemas/CategoryDto"
 
     FavouritesDto:
