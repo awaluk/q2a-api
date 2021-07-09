@@ -10,9 +10,9 @@ class AuthController extends AbstractController
             return $this->errors([], qa_lang('q2a_api/already_logged_in'), Response::STATUS_FORBIDDEN);
         }
 
-        $login = qa_post_text('login');
-        $password = qa_post_text('password');
-        $remember = qa_post_text('remember');
+        $login = $this->request->get('login');
+        $password = $this->request->get('password');
+        $remember = $this->request->get('remember');
 
         if (strlen($login) === 0 || strlen($password) === 0) {
             return $this->errors(['login' => qa_lang('users/user_not_found')]);

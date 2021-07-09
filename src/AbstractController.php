@@ -4,6 +4,13 @@ namespace Q2aApi;
 
 abstract class AbstractController
 {
+    protected $request;
+
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
+
     public function json(array $data, int $status = Response::STATUS_OK): Response
     {
         return new JsonResponse($data, $status);

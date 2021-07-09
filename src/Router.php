@@ -4,27 +4,23 @@ namespace Q2aApi;
 
 class Router
 {
-    public function match(string $url): array
+    private $routes;
+
+    public function __construct()
     {
-        if ($url === 'categories') {
-            return $this->getParams('CategoriesController::list');
-        }
-        if ($url === 'statistics') {
-            return $this->getParams('StatisticsController::get');
-        }
-        if ($url === 'login') {
-            return $this->getParams('AuthController::login');
-        }
+        $this->routes = require_once __DIR__ . '/../routes.php';
+    }
 
-        if (!qa_is_logged_in()) {
-            throw new HttpException(qa_lang('q2a_api/response_unauthorized'), Response::STATUS_UNAUTHORIZED);
-        }
+    public function match(Request $request): array
+    {
+        foreach ($this->routes as $route) {
+            if ($route['path'] === $request->getPath() && strtolower($route['method']) === $request->getMethod()) {
+                if (isset($route['auth']) && $route['auth'] === true && qa_is_logged_in() === false) {
+                    throw new HttpException(qa_lang('q2a_api/response_unauthorized'), Response::STATUS_UNAUTHORIZED);
+                }
 
-        if ($url === 'account') {
-            return $this->getParams('AccountController::account');
-        }
-        if ($url === 'favourites') {
-            return $this->getParams('AccountController::favourites');
+                return $this->getParams($route['action']);
+            }
         }
 
         throw new NotFoundHttpException();
