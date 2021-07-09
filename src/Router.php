@@ -12,6 +12,9 @@ class Router
         if ($url === 'statistics') {
             return $this->getParams('StatisticsController::get');
         }
+        if ($url === 'login') {
+            return $this->getParams('AuthController::login');
+        }
 
         if (!qa_is_logged_in()) {
             throw new HttpException(qa_lang('q2a_api/response_unauthorized'), Response::STATUS_UNAUTHORIZED);

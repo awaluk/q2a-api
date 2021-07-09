@@ -18,11 +18,66 @@ servers:
   - url: /api
 
 tags:
+  - name: Auth
   - name: Account
   - name: Category
   - name: General
 
 paths:
+  /login:
+    post:
+      tags:
+        - Auth
+      summary: User login
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - login
+                - password
+              properties:
+                login:
+                  type: string
+                  example: user
+                  description: User email or name (when logging in via name is enabled)
+                password:
+                  type: string
+                  example: pass
+                rememberMe:
+                  type: boolean
+                  example: false
+                  default: false
+      responses:
+        200:
+          description: User logged
+        400:
+          description: Invalid data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fields:
+                    type: object
+                    properties:
+                      password:
+                        type: object
+                        example: Wrong password
+        403:
+          description: Already logged in
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Already logged in
+
   /account:
     get:
       tags:
@@ -38,7 +93,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AccountDto"
-
         401:
           description: Unauthorized
 
