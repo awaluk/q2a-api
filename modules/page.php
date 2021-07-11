@@ -1,7 +1,7 @@
 <?php
 
 use Q2aApi\Base\Router;
-use Q2aApi\Exceptions\HttpException;
+use Q2aApi\Exception\HttpException;
 use Q2aApi\Http\JsonResponse;
 use Q2aApi\Http\Request;
 
@@ -18,13 +18,12 @@ class api_page
     {
         try {
             $request = new Request($requestUrl);
-            list($file, $class, $method) = (new Router())->match($request);
+            list($class, $method) = (new Router())->match($request);
             $controller = new $class($request);
             $response = $controller->{$method}();
         } catch (HttpException $exception) {
             $response = $exception->getJsonResponse();
         } catch (Error $e) {
-            var_dump($e);exit();
             $response = new JsonResponse(
                 ['message' => qa_lang('q2a_api/response_internal_server_error')],
                 JsonResponse::STATUS_INTERNAL_SERVER_ERROR

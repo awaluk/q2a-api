@@ -1,9 +1,10 @@
 <?php
 
-namespace Q2aApi;
+namespace Q2aApi\Controller;
 
 use Q2aApi\Base\AbstractController;
 use Q2aApi\Http\Response;
+use Q2aApi\Response\AccountResponse;
 
 class AuthController extends AbstractController
 {

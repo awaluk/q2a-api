@@ -1,6 +1,6 @@
 <?php
 
-namespace Q2aApi\Controllers;
+namespace Q2aApi\Controller;
 
 use Q2aApi\Base\AbstractController;
 use Q2aApi\Http\Response;

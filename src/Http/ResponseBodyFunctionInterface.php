@@ -2,7 +2,7 @@
 
 namespace Q2aApi\Http;
 
-interface ResponseBodyFunction
+interface ResponseBodyFunctionInterface
 {
     public function data(): array;
 }

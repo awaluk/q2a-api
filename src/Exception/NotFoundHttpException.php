@@ -1,6 +1,6 @@
 <?php
 
-namespace Q2aApi\Exceptions;
+namespace Q2aApi\Exception;
 
 use Q2aApi\Http\Response;
 

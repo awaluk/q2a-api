@@ -1,11 +1,11 @@
 <?php
 
-namespace Q2aApi;
+namespace Q2aApi\Response;
 
 use Q2aApi\Http\JsonResponse;
-use Q2aApi\Http\ResponseBodyFunction;
+use Q2aApi\Http\ResponseBodyFunctionInterface;
 
-class AccountResponse extends JsonResponse implements ResponseBodyFunction
+class AccountResponse extends JsonResponse implements ResponseBodyFunctionInterface
 {
     public function data(): array
     {

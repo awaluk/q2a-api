@@ -2,7 +2,7 @@
 
 namespace Q2aApi\Http;
 
-use Q2aApi\Exceptions\HttpException;
+use Q2aApi\Exception\HttpException;
 
 class Request
 {
