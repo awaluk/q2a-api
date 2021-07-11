@@ -45,6 +45,6 @@ class AuthController extends AbstractController
         require_once QA_INCLUDE_DIR . 'app/users.php';
         qa_set_logged_in_user($userid, $userinfo['handle'], !empty($remember));
 
-        return $this->json([]);
+        return new AccountResponse();
     }
 }

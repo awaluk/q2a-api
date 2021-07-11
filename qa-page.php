@@ -14,10 +14,14 @@ class api_page
         require_once 'src/AbstractController.php';
         require_once 'src/Request.php';
         require_once 'src/Response.php';
+        require_once 'src/ResponseBodyFunction.php';
         require_once 'src/JsonResponse.php';
         require_once 'src/Router.php';
+
         require_once 'src/Exceptions/HttpException.php';
         require_once 'src/Exceptions/NotFoundHttpException.php';
+
+        require_once 'src/Responses/AccountResponse.php';
 
         try {
             $request = new \Q2aApi\Request($requestUrl);
@@ -27,11 +31,6 @@ class api_page
             $response = $controller->{$method}();
         } catch (\Q2aApi\HttpException $exception) {
             $response = $exception->getJsonResponse();
-        } catch (Error $e) {
-            $response = new \Q2aApi\JsonResponse(
-                ['message' => qa_lang('q2a_api/response_internal_server_error')],
-                \Q2aApi\JsonResponse::STATUS_INTERNAL_SERVER_ERROR
-            );
         }
 
         http_response_code($response->getStatus());

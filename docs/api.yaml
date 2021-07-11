@@ -54,6 +54,10 @@ paths:
       responses:
         200:
           description: User logged
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountDto"
         400:
           description: Invalid data
           content:
