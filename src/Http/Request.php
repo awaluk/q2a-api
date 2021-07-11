@@ -1,6 +1,8 @@
 <?php
 
-namespace Q2aApi;
+namespace Q2aApi\Http;
+
+use Q2aApi\Exceptions\HttpException;
 
 class Request
 {

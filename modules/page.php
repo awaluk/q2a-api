@@ -1,5 +1,10 @@
 <?php
 
+use Q2aApi\Base\Router;
+use Q2aApi\Exceptions\HttpException;
+use Q2aApi\Http\JsonResponse;
+use Q2aApi\Http\Request;
+
 class api_page
 {
     public function match_request($request)
@@ -11,26 +16,19 @@ class api_page
 
     public function process_request($requestUrl)
     {
-        require_once 'src/AbstractController.php';
-        require_once 'src/Request.php';
-        require_once 'src/Response.php';
-        require_once 'src/ResponseBodyFunction.php';
-        require_once 'src/JsonResponse.php';
-        require_once 'src/Router.php';
-
-        require_once 'src/Exceptions/HttpException.php';
-        require_once 'src/Exceptions/NotFoundHttpException.php';
-
-        require_once 'src/Responses/AccountResponse.php';
-
         try {
-            $request = new \Q2aApi\Request($requestUrl);
-            list($file, $class, $method) = (new \Q2aApi\Router())->match($request);
-            require_once 'src/Controllers/' . $file;
+            $request = new Request($requestUrl);
+            list($file, $class, $method) = (new Router())->match($request);
             $controller = new $class($request);
             $response = $controller->{$method}();
-        } catch (\Q2aApi\HttpException $exception) {
+        } catch (HttpException $exception) {
             $response = $exception->getJsonResponse();
+        } catch (Error $e) {
+            var_dump($e);exit();
+            $response = new JsonResponse(
+                ['message' => qa_lang('q2a_api/response_internal_server_error')],
+                JsonResponse::STATUS_INTERNAL_SERVER_ERROR
+            );
         }
 
         http_response_code($response->getStatus());

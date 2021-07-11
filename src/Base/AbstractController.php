@@ -1,6 +1,10 @@
 <?php
 
-namespace Q2aApi;
+namespace Q2aApi\Base;
+
+use Q2aApi\Http\JsonResponse;
+use Q2aApi\Http\Request;
+use Q2aApi\Http\Response;
 
 abstract class AbstractController
 {

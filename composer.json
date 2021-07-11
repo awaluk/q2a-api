@@ -1,0 +1,13 @@
+{
+  "name": "awaluk/q2a-api",
+  "description": "Adds simple API to serve some data as JSON",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Q2aApi\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=7.0"
+  }
+}

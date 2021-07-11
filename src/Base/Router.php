@@ -1,6 +1,11 @@
 <?php
 
-namespace Q2aApi;
+namespace Q2aApi\Base;
+
+use Q2aApi\Exceptions\HttpException;
+use Q2aApi\Exceptions\NotFoundHttpException;
+use Q2aApi\Http\Request;
+use Q2aApi\Http\Response;
 
 class Router
 {
@@ -8,7 +13,7 @@ class Router
 
     public function __construct()
     {
-        $this->routes = require_once __DIR__ . '/../routes.php';
+        $this->routes = require_once __DIR__ . '/../../routes.php';
     }
 
     public function match(Request $request): array
@@ -32,7 +37,7 @@ class Router
 
         return [
             "{$controller}.php", // file
-            "Q2aApi\\{$controller}", // class
+            "Q2aApi\\Controllers\\{$controller}", // class
             $method // method
         ];
     }

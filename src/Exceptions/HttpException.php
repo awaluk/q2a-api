@@ -1,6 +1,8 @@
 <?php
 
-namespace Q2aApi;
+namespace Q2aApi\Exceptions;
+
+use Q2aApi\Http\JsonResponse;
 
 class HttpException extends \Exception
 {

@@ -2,6 +2,9 @@
 
 namespace Q2aApi;
 
+use Q2aApi\Base\AbstractController;
+use Q2aApi\Http\Response;
+
 class AccountController extends AbstractController
 {
     public function account(): Response

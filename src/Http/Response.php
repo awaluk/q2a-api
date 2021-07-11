@@ -1,6 +1,6 @@
 <?php
 
-namespace Q2aApi;
+namespace Q2aApi\Http;
 
 class Response
 {

@@ -2,6 +2,9 @@
 
 namespace Q2aApi;
 
+use Q2aApi\Http\JsonResponse;
+use Q2aApi\Http\ResponseBodyFunction;
+
 class AccountResponse extends JsonResponse implements ResponseBodyFunction
 {
     public function data(): array

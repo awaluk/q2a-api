@@ -19,7 +19,9 @@ if (!defined('QA_VERSION')) {
     exit();
 }
 
+require_once __DIR__ . '/vendor/autoload.php';
+
 define('API_URL', 'api');
-qa_register_plugin_module('page', 'qa-page.php', 'api_page', 'API page');
-qa_register_plugin_module('page', 'qa-admin.php', 'api_admin', 'API admin');
+qa_register_plugin_module('page', 'modules/page.php', 'api_page', 'API page');
+qa_register_plugin_module('page', 'modules/admin.php', 'api_admin', 'API admin');
 qa_register_plugin_phrases('lang/*.php', 'q2a_api');

@@ -1,6 +1,9 @@
 <?php
 
-namespace Q2aApi;
+namespace Q2aApi\Controllers;
+
+use Q2aApi\Base\AbstractController;
+use Q2aApi\Http\Response;
 
 class StatisticsController extends AbstractController
 {
