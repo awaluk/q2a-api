@@ -51,4 +51,11 @@ class AuthController extends AbstractController
 
         return new AccountResponse();
     }
+
+    public function logout()
+    {
+        qa_set_logged_in_user(null);
+
+        return $this->json([], Response::STATUS_NO_CONTENT);
+    }
 }

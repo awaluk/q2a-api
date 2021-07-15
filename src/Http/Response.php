@@ -5,6 +5,7 @@ namespace Q2aApi\Http;
 class Response
 {
     const STATUS_OK = 200;
+    const STATUS_NO_CONTENT = 204;
 
     const STATUS_BAD_REQUEST = 400;
     const STATUS_UNAUTHORIZED = 401;

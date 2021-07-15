@@ -81,6 +81,15 @@ paths:
                   message:
                     type: string
                     example: Already logged in
+  /logout:
+    post:
+      tags:
+        - Auth
+      summary: User logout
+      operationId: logout
+      responses:
+        204:
+          description: User logged out
 
   /account:
     get:
