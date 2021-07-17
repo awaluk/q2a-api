@@ -64,7 +64,7 @@ class QuestionsListResponse extends JsonResponse implements ResponseBodyFunction
                 ];
             }, QuestionHelper::tagsStringToArray($question['tags'])),
             'category' => [
-                'id' => $question['categoryid'],
+                'id' => (int)$question['categoryid'],
                 'title' => $question['categoryname'],
                 'path' => $question['categorybackpath'],
                 'favourite' => isset($this->favourites['category'][$question['categorybackpath']])
