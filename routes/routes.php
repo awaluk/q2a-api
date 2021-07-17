@@ -4,6 +4,8 @@ return [
     ['path' => 'login', 'method' => 'post', 'action' => 'AuthController::login'],
     ['path' => 'logout', 'method' => 'post', 'action' => 'AuthController::logout', 'auth' => true],
 
+    ['path' => 'questions', 'method' => 'get', 'action' => 'QuestionsController::list'],
+
     ['path' => 'categories', 'method' => 'get', 'action' => 'CategoriesController::list'],
     ['path' => 'statistics', 'method' => 'get', 'action' => 'StatisticsController::get'],
 
