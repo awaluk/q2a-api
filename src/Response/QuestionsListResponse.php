@@ -45,8 +45,6 @@ class QuestionsListResponse extends JsonResponse implements ResponseBodyFunction
 
     private function getQuestionItem(array $question)
     {
-        $options = qa_post_html_options($question);
-
         return [
             'id' => (int)$question['postid'],
             'title' => $question['title'],
@@ -71,17 +69,24 @@ class QuestionsListResponse extends JsonResponse implements ResponseBodyFunction
             ],
             'change' => [
                 'type' => 'question_created',
-                'user' => [
-                    'id' => (int)$question['userid'],
-                    'name' => $question['handle'],
-                    'title' => qa_get_points_title_html($question['points'], $options['pointstitle']),
-                    'points' => $question['points'],
-                    'level' => $question['level'],
-                    'favourite' => isset($this->favourites['user'][$question['userid']])
-                ],
+                'user' => $question['userid'] !== null ? $this->getUser($question) : null,
                 'date' => date('c', $question['created']),
                 'showItemId' => null
             ]
+        ];
+    }
+
+    private function getUser(array $question): array
+    {
+        $options = qa_post_html_options($question);
+
+        return [
+            'id' => (int)$question['userid'],
+            'name' => $question['handle'],
+            'title' => qa_get_points_title_html($question['points'], $options['pointstitle']),
+            'points' => $question['points'],
+            'level' => $question['level'],
+            'favourite' => isset($this->favourites['user'][$question['userid']])
         ];
     }
 }

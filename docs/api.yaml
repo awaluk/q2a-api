@@ -394,7 +394,6 @@ components:
           type: object
           required:
             - type
-            - user
             - date
           properties:
             type:
@@ -451,6 +450,8 @@ components:
 
     InlineUserDto:
       type: object
+      nullable: true
+      description: "`null` if user has been removed"
       required:
         - id
         - name

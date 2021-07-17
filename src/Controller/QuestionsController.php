@@ -43,7 +43,7 @@ class QuestionsController extends AbstractController
         $questions = qa_db_select_with_pending(qa_db_qs_selectspec(
             qa_get_logged_in_userid(),
             $sort,
-            $paginator->getFirstItem(),
+            $paginator->getFirstItem() - 1,
             $categorySlugs ?? [],
             null,
             false,
