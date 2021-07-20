@@ -3,6 +3,7 @@
 namespace Q2aApi\Response;
 
 use Q2aApi\Base\Paginator;
+use Q2aApi\Helper\CategoryHelper;
 use Q2aApi\Helper\QuestionHelper;
 use Q2aApi\Http\JsonResponse;
 use Q2aApi\Http\ResponseBodyFunctionInterface;
@@ -64,7 +65,7 @@ class QuestionsListResponse extends JsonResponse implements ResponseBodyFunction
             'category' => [
                 'id' => (int)$question['categoryid'],
                 'title' => $question['categoryname'],
-                'path' => $question['categorybackpath'],
+                'path' => CategoryHelper::changeBackPathToPath($question['categorybackpath']),
                 'favourite' => isset($this->favourites['category'][$question['categorybackpath']])
             ],
             'change' => [

@@ -10,4 +10,9 @@ class CategoryHelper
     {
         return explode('/', $path);
     }
+
+    public static function changeBackPathToPath(string $backPath): string
+    {
+        return implode('/', array_reverse(explode('/', $backPath)));
+    }
 }
