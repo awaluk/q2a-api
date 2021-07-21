@@ -24,6 +24,19 @@ class QuestionsController extends AbstractController
         list($questions, $paginator) = $this->service->getList($this->request);
         $favourites = qa_get_favorite_non_qs_map();
 
-        return new QuestionsListResponse($paginator, $questions, $favourites);
+        return new QuestionsListResponse($questions, $favourites, $paginator);
+    }
+
+    public function home(): Response
+    {
+        $userId = qa_get_logged_in_userid();
+        list($questions1, $questions2) = qa_db_select_with_pending(
+            qa_db_qs_selectspec($userId, 'created', 0, [], null, false, false, qa_opt_if_loaded('page_size_activity')),
+            qa_db_recent_a_qs_selectspec($userId, 0, [])
+        );
+        $questions = qa_any_sort_and_dedupe(array_merge($questions1, $questions2));
+        $favourites = qa_get_favorite_non_qs_map();
+
+        return new QuestionsListResponse($questions, $favourites);
     }
 }

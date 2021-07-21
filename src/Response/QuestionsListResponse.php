@@ -14,11 +14,11 @@ class QuestionsListResponse extends JsonResponse implements ResponseBodyFunction
     private $questions;
     private $favourites;
 
-    public function __construct(Paginator $paginator, array $questions, array $favourites = [])
+    public function __construct(array $questions, array $favourites = [], Paginator $paginator = null)
     {
-        $this->paginator = $paginator;
         $this->questions = $questions;
         $this->favourites = $favourites;
+        $this->paginator = $paginator;
 
         parent::__construct();
     }
@@ -28,6 +28,10 @@ class QuestionsListResponse extends JsonResponse implements ResponseBodyFunction
         $data = [];
         foreach ($this->questions as $question) {
             $data[] = $this->getQuestionItem($question);
+        }
+
+        if ($this->paginator === null) {
+            return $data;
         }
 
         return [
@@ -46,6 +50,8 @@ class QuestionsListResponse extends JsonResponse implements ResponseBodyFunction
 
     private function getQuestionItem(array $question)
     {
+        $hasAnswerOnList = isset($question['_type']) && $question['_type'] === 'A';
+
         return [
             'id' => (int)$question['postid'],
             'title' => $question['title'],
@@ -69,25 +75,27 @@ class QuestionsListResponse extends JsonResponse implements ResponseBodyFunction
                 'favourite' => isset($this->favourites['category'][$question['categorybackpath']])
             ],
             'change' => [
-                'type' => 'question_created',
-                'user' => $question['userid'] !== null ? $this->getUser($question) : null,
-                'date' => date('c', $question['created']),
-                'showItemId' => null
+                'type' => $hasAnswerOnList ? 'answer_created' : 'question_created',
+                'user' => $hasAnswerOnList
+                    ? ($question['ouserid'] !== null ? $this->getUser($question, 'o') : null)
+                    : ($question['userid'] !== null ? $this->getUser($question) : null),
+                'date' => date('c', $question['otime'] ?? $question['created']),
+                'showItemId' => $hasAnswerOnList ? (int)$question['opostid'] : null
             ]
         ];
     }
 
-    private function getUser(array $question): array
+    private function getUser(array $question, string $prefix = ''): array
     {
         $options = qa_post_html_options($question);
 
         return [
-            'id' => (int)$question['userid'],
-            'name' => $question['handle'],
-            'title' => qa_get_points_title_html($question['points'], $options['pointstitle']),
-            'points' => $question['points'],
-            'level' => $question['level'],
-            'favourite' => isset($this->favourites['user'][$question['userid']])
+            'id' => (int)$question[$prefix . 'userid'],
+            'name' => $question[$prefix . 'handle'],
+            'title' => qa_get_points_title_html($question[$prefix . 'points'], $options['pointstitle']),
+            'points' => (int)$question[$prefix . 'points'],
+            'level' => (int)$question[$prefix . 'level'],
+            'favourite' => isset($this->favourites['user'][$question[$prefix . 'userid']])
         ];
     }
 }

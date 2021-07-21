@@ -192,6 +192,22 @@ paths:
                       $ref: "#/components/schemas/InlineQuestionDto"
                   pagination:
                     $ref: "#/components/schemas/PaginationDto"
+  /questions/home:
+    get:
+      tags:
+        - Question
+      summary: Get list of questions for home list
+      description: List of latest questions without pagination and with additional information about latest answer in `change` field.
+      operationId: getQuestionsListForHome
+      responses:
+        200:
+          description: List of questions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/InlineQuestionDto"
 
   /statistics:
     get:
@@ -403,8 +419,8 @@ components:
           properties:
             type:
               type: string
-              enum: [question_created]
-              example: Latest action to show on list
+              enum: [question_created, answer_created]
+              description: Latest action to show on list
             user:
               $ref: "#/components/schemas/InlineUserDto"
             date:

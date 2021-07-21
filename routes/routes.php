@@ -5,6 +5,7 @@ return [
     ['path' => 'logout', 'method' => 'post', 'action' => 'AuthController::logout', 'auth' => true],
 
     ['path' => 'questions', 'method' => 'get', 'action' => 'QuestionsController::list'],
+    ['path' => 'questions/home', 'method' => 'get', 'action' => 'QuestionsController::home'],
 
     ['path' => 'categories', 'method' => 'get', 'action' => 'CategoriesController::list'],
     ['path' => 'statistics', 'method' => 'get', 'action' => 'StatisticsController::get'],
