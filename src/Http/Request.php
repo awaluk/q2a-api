@@ -42,6 +42,11 @@ class Request
         return $this->data[$key] ?? null;
     }
 
+    public function has(string $key): bool
+    {
+        return !empty($this->data[$key]);
+    }
+
     private function initialize()
     {
         $this->path = substr($this->url, strlen(API_URL) + 1);
