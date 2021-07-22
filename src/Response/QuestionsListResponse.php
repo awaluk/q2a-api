@@ -50,8 +50,6 @@ class QuestionsListResponse extends JsonResponse implements ResponseBodyFunction
 
     private function getQuestionItem(array $question)
     {
-        $hasAnswerOnList = isset($question['_type']) && $question['_type'] === 'A';
-
         return [
             'id' => (int)$question['postid'],
             'title' => $question['title'],
@@ -75,12 +73,14 @@ class QuestionsListResponse extends JsonResponse implements ResponseBodyFunction
                 'favourite' => isset($this->favourites['category'][$question['categorybackpath']])
             ],
             'change' => [
-                'type' => $hasAnswerOnList ? 'answer_created' : 'question_created',
-                'user' => $hasAnswerOnList
+                'type' => $this->getLatestChangeType($question),
+                'user' => array_key_exists('ouserid', $question)
                     ? ($question['ouserid'] !== null ? $this->getUser($question, 'o') : null)
                     : ($question['userid'] !== null ? $this->getUser($question) : null),
                 'date' => date('c', $question['otime'] ?? $question['created']),
-                'showItemId' => $hasAnswerOnList ? (int)$question['opostid'] : null
+                'showItemId' => isset($question['opostid']) && $question['obasetype'] !== 'Q'
+                    ? (int)$question['opostid']
+                    : null
             ]
         ];
     }
@@ -97,5 +97,37 @@ class QuestionsListResponse extends JsonResponse implements ResponseBodyFunction
             'level' => (int)$question[$prefix . 'level'],
             'favourite' => isset($this->favourites['user'][$question[$prefix . 'userid']])
         ];
+    }
+
+    private function getLatestChangeType(array $question): string
+    {
+        $actions = [
+            'C_Y' => 'answer_changed_to_comment',
+            'C_M' => 'comment_moved',
+            'A_S' => 'answer_selected',
+            'Q_A' => 'question_category_updated',
+            'Q_T' => 'question_tags_updated',
+            'C_E' => 'comment_updated',
+            'A_E' => 'answer_updated',
+            'Q_E' => 'question_updated',
+            'C' => 'comment_created',
+            'A' => 'answer_created',
+            'Q' => 'question_created',
+        ];
+
+        $type = $question['obasetype'] ?? $question['basetype'];
+        if (isset($question['oupdatetype'])) {
+            $type .= '_' . $question['oupdatetype'];
+        }
+
+        if ($type === 'Q_C') {
+            return isset($question['closedbyid']) ? 'question_closed' : 'question_reopened';
+        }
+        if (in_array($type, ['Q_H', 'A_H', 'C_H'])) {
+            $suffix = isset($question['hidden']) && $question['hidden'] === '1' ? '_hidden' : '_restored';
+            return ($type === 'Q_H' ? 'question' : ($type === 'A_H' ? 'answer' : 'comment')) . $suffix;
+        }
+
+        return $actions[$type];
     }
 }
