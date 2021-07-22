@@ -208,6 +208,22 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/InlineQuestionDto"
+  /questions/activity:
+    get:
+      tags:
+        - Question
+      summary: Get list of questions for last activity list
+      description: List of latest questions without pagination and with additional information about latest action in `change` field.
+      operationId: getQuestionsListForActivity
+      responses:
+        200:
+          description: List of questions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/InlineQuestionDto"
 
   /statistics:
     get:
@@ -419,7 +435,7 @@ components:
           properties:
             type:
               type: string
-              enum: [question_created, answer_created]
+              enum: [question_created, answer_created, comment_created, question_updated, answer_updated, comment_updated, question_hidden, answer_hidden, comment_hidden, question_restored, answer_restored, comment_restored, question_closed, question_reopened, question_tags_updated, question_category_updated, answer_selected, comment_moved, answer_changed_to_comment]
               description: Latest action to show on list
             user:
               $ref: "#/components/schemas/InlineUserDto"
