@@ -2,6 +2,8 @@
 
 namespace Q2aApi\Service;
 
+use Q2aApi\Helper\CategoryHelper;
+
 class CategoriesService
 {
     public function getAllCategories(): array
@@ -19,7 +21,7 @@ class CategoriesService
                 'id' => (int)$category['categoryid'],
                 'title' => $category['title'],
                 'slug' => $category['tags'],
-                'path' => $category['backpath'],
+                'path' => CategoryHelper::changeBackPathToPath($category['backpath']),
                 'description' => $category['content'],
                 'position' => (int)$category['position'],
                 'questionsCount' => (int)$category['qcount'],
