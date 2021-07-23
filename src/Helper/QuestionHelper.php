@@ -8,16 +8,7 @@ class QuestionHelper
 {
     public static function titleToSlug(string $title): string
     {
-        $slug = str_replace(
-            ['ą', 'ć', 'ę', 'ł', 'ń', 'ó', 'ś', 'ź', 'ż'],
-            ['a', 'c', 'e', 'l', 'n', 'o', 's', 'z', 'z'],
-            $title
-        );
-        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $slug)));
-        $slug = preg_replace('/-+/', '-', $slug);
-        $slug = trim($slug, '-');
-
-        return $slug;
+        return explode('/', qa_q_request(0, $title))[1];
     }
 
     public static function tagsStringToArray(string $tags): array
