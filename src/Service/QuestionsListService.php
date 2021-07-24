@@ -30,6 +30,24 @@ class QuestionsListService
             ];
         }
 
+        if (in_array($request->get('unanswered'), [true, 'true'], true)) {
+            $itemsPerPage = qa_opt('page_size_una_qs');
+            $paginator = new Paginator(qa_opt('cache_unaqcount'), $itemsPerPage, $page);
+
+            return [
+                qa_db_select_with_pending(qa_db_unanswered_qs_selectspec(
+                    $userId,
+                    'acount',
+                    $paginator->getFirstItem() - 1,
+                    [],
+                    false,
+                    false,
+                    $itemsPerPage
+                )),
+                $paginator
+            ];
+        }
+
         if ($request->has('category')) {
             $categorySlugs = CategoryHelper::pathToSlugs($request->get('category'));
             $categoryData = qa_db_select_with_pending(qa_db_full_category_selectspec($categorySlugs, false));

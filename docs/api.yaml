@@ -163,21 +163,27 @@ paths:
             type: string
             enum: [hot, votes, answers, views, date]
             default: date
-          description: "Sort questions, unavailable with `tag` filter."
+          description: "Sort questions, unavailable with `tag` and `unanswered` filter."
         - in: query
           name: category
           schema:
             type: string
             example: programming/php
             default: null
-          description: "Category path to filter questions by category. Only one filter can be used in same time: `category` or` tag`."
+          description: "Category path to filter questions by category. Only one filter can be used in same time: `category`, `tag`, `unanswered`."
         - in: query
           name: tag
           schema:
             type: string
             example: programming
             default: null
-          description: "Filter by tag name. Only one filter can be used in same time: `category` or` tag`."
+          description: "Filter by tag name. Only one filter can be used in same time: `category`, `tag`, `unanswered`."
+        - in: query
+          name: unanswered
+          schema:
+            type: boolean
+            default: false
+          description: "Show only questions without answers. Only one filter can be used in same time: `category`, `tag`, `unanswered`."
       responses:
         200:
           description: List of questions
