@@ -18,9 +18,9 @@ class api_page
     {
         try {
             $request = new Request($requestUrl);
-            list($class, $method) = (new Router())->match($request);
+            list($class, $method, $parameters) = (new Router())->match($request);
             $controller = new $class($request);
-            $response = $controller->{$method}();
+            $response = $controller->{$method}(...$parameters);
         } catch (HttpException $exception) {
             $response = $exception->getJsonResponse();
         } catch (Error $e) {
