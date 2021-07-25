@@ -7,6 +7,7 @@ return [
 
     'response_bad_request' => 'Bad request',
     'response_unauthorized' => 'Unauthorized',
+    'response_forbidden' => 'Forbidden',
     'response_not_found' => 'Not found',
     'response_internal_server_error' => 'Server error',
 

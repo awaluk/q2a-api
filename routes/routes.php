@@ -7,6 +7,9 @@ return [
     ['path' => 'questions', 'method' => 'get', 'action' => 'QuestionsController::list'],
     ['path' => 'questions/home', 'method' => 'get', 'action' => 'QuestionsController::home'],
     ['path' => 'questions/activity', 'method' => 'get', 'action' => 'QuestionsController::activity'],
+    ['path' => 'questions/{question}', 'method' => 'get', 'action' => 'QuestionController::show', 'parameters' => [
+        'question' => '\d+'
+    ]],
 
     ['path' => 'categories', 'method' => 'get', 'action' => 'CategoriesController::list'],
     ['path' => 'statistics', 'method' => 'get', 'action' => 'StatisticsController::get'],
