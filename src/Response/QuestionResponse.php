@@ -61,16 +61,19 @@ class QuestionResponse extends JsonResponse implements ResponseBodyFunctionInter
             return $data;
         }
 
-        $data['author'] = [
-            'id' => $this->question->getAuthor()->getId(),
-            'name' => $this->question->getAuthor()->getName(),
-            'title' => $this->question->getAuthor()->getPointsTitle(),
-            'points' => $this->question->getAuthor()->getPoints(),
-            'level' => $this->question->getAuthor()->getLevel(),
-            'favourite' => isset($this->favourites['user'][$this->question->getAuthor()->getId()])
-        ];
-
-        return $data;
+        return array_merge($data, [
+            'author' => [
+                'id' => $this->question->getAuthor()->getId(),
+                'name' => $this->question->getAuthor()->getName(),
+                'title' => $this->question->getAuthor()->getPointsTitle(),
+                'points' => $this->question->getAuthor()->getPoints(),
+                'level' => $this->question->getAuthor()->getLevel(),
+                'favourite' => isset($this->favourites['user'][$this->question->getAuthor()->getId()])
+            ],
+            'isHidden' => $this->question->isHidden(),
+            'contentType' => $this->question->hasHtmlContent() ? 'html' : 'text',
+            'content' => $this->question->getContent(),
+        ]);
     }
 
     private function getUser(string $prefix = ''): array

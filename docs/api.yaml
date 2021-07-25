@@ -231,6 +231,29 @@ paths:
                 items:
                   $ref: "#/components/schemas/InlineQuestionDto"
 
+  /questions/{questionId}:
+    get:
+      tags:
+        - Question
+      parameters:
+        - in: path
+          name: questionId
+          schema:
+            type: integer
+      summary: Get question details
+      operationId: getQuestion
+      responses:
+        200:
+          description: Question details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionDto"
+        403:
+          description: Question exists, but it's hidden and unavailable for logged user
+        404:
+          description: Invalid question id
+
   /statistics:
     get:
       tags:
@@ -453,6 +476,29 @@ components:
               type: integer
               example: 5
               description: Id of latest answer or comment for link to question details page
+
+    QuestionDto:
+      allOf:
+        - $ref: "#/components/schemas/InlineQuestionDto"
+        - type: object
+          required:
+            - isHidden
+            - contentType
+            - content
+          properties:
+            author:
+              $ref: "#/components/schemas/InlineUserDto"
+            isHidden:
+              type: boolean
+              default: false
+            contentType:
+              type: string
+              enum: ["html", "text"]
+              example: "html"
+            content:
+              type: string
+              example: "<p>Lorem ipsum dolor…</p>"
+              description: Format depends on `contentType` field
 
     InlineTagDto:
       type: object
