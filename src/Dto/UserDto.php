@@ -43,7 +43,7 @@ class UserDto implements DtoInterface
         return (int)$this->data['points'];
     }
 
-    public function getPointsTitle(): string
+    public function getPointsTitle()
     {
         return qa_get_points_title_html($this->data['points'], $this->q2aOptions['pointstitle']);
     }
