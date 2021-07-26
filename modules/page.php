@@ -24,6 +24,7 @@ class api_page
         } catch (HttpException $exception) {
             $response = $exception->getJsonResponse();
         } catch (Error $e) {
+            error_log($e);
             $response = new JsonResponse(
                 ['message' => qa_lang('q2a_api/response_internal_server_error')],
                 JsonResponse::STATUS_INTERNAL_SERVER_ERROR
