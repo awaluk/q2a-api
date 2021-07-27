@@ -107,7 +107,7 @@ class QuestionResponse extends JsonResponse implements ResponseBodyFunctionInter
         ];
 
         $type = $this->question->getOriginal('obasetype') ?? $this->question->getType();
-        if ($this->question->hasOriginal('oupdatetype')) {
+        if (!empty($this->question->getOriginal('oupdatetype'))) {
             $type .= '_' . $this->question->getOriginal('oupdatetype');
         }
 
