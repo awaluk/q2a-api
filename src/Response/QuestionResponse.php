@@ -48,7 +48,7 @@ class QuestionResponse extends JsonResponse implements ResponseBodyFunctionInter
             ],
             'change' => [
                 'type' => $this->getLatestChangeType(),
-                'user' => $this->question->hasOriginal('ouserid')
+                'user' => $this->question->hasOriginal('ouserid') && $this->question->getOriginal('oupdatetype') !== null
                     ? ($this->question->getOriginal('ouserid') !== null ? $this->getUser('o') : null)
                     : ($this->question->getOriginal('userid') !== null ? $this->getUser() : null),
                 'date' => date('c', $this->question->getOriginal('otime') ?? $this->question->getOriginal('created')),
