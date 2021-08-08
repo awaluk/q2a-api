@@ -449,6 +449,7 @@ components:
         - answers
         - votes
         - views
+        - userVote
         - favourite
         - closed
         - hasBestAnswer
@@ -476,6 +477,10 @@ components:
         views:
           type: integer
           example: 100
+        userVote:
+          type: integer
+          enum: [-1, 0, 1]
+          description: Current user's vote
         favourite:
           type: boolean
           example: false
@@ -544,17 +549,12 @@ components:
             - isHidden
             - contentType
             - content
-            - userVote
           properties:
             author:
               $ref: "#/components/schemas/InlineUserDto"
             isHidden:
               type: boolean
               default: false
-            userVote:
-              type: integer
-              enum: [-1, 0, 1]
-              description: Current user's vote
             contentType:
               type: string
               enum: ["html", "text"]
