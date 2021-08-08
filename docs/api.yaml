@@ -411,6 +411,7 @@ components:
         - answers
         - votes
         - views
+        - userVote
         - favourite
         - closed
         - hasBestAnswer
@@ -438,6 +439,10 @@ components:
         views:
           type: integer
           example: 100
+        userVote:
+          type: integer
+          enum: [-1, 0, 1]
+          description: Current user's vote
         favourite:
           type: boolean
           example: false
@@ -464,7 +469,28 @@ components:
           properties:
             type:
               type: string
-              enum: [question_created, answer_created, comment_created, question_updated, answer_updated, comment_updated, question_hidden, answer_hidden, comment_hidden, question_restored, answer_restored, comment_restored, question_closed, question_reopened, question_tags_updated, question_category_updated, answer_selected, comment_moved, answer_changed_to_comment]
+              enum:
+                [
+                  question_created,
+                  answer_created,
+                  comment_created,
+                  question_updated,
+                  answer_updated,
+                  comment_updated,
+                  question_hidden,
+                  answer_hidden,
+                  comment_hidden,
+                  question_restored,
+                  answer_restored,
+                  comment_restored,
+                  question_closed,
+                  question_reopened,
+                  question_tags_updated,
+                  question_category_updated,
+                  answer_selected,
+                  comment_moved,
+                  answer_changed_to_comment,
+                ]
               description: Latest action to show on list
             user:
               $ref: "#/components/schemas/InlineUserDto"
@@ -485,17 +511,12 @@ components:
             - isHidden
             - contentType
             - content
-            - userVote
           properties:
             author:
               $ref: "#/components/schemas/InlineUserDto"
             isHidden:
               type: boolean
               default: false
-            userVote:
-              type: integer
-              enum: [-1, 0, 1]
-              description: Current user's vote
             contentType:
               type: string
               enum: ["html", "text"]
