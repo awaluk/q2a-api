@@ -73,6 +73,6 @@ class QuestionDto extends PostDto
 
     public function getUserVote (): int 
     {
-        return $this->data['uservote'] || 0;
+        return $this->data['uservote'] ?? 0;
     }
 }
