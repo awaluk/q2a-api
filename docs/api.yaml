@@ -485,12 +485,17 @@ components:
             - isHidden
             - contentType
             - content
+            - userVote
           properties:
             author:
               $ref: "#/components/schemas/InlineUserDto"
             isHidden:
               type: boolean
               default: false
+            userVote:
+              type: integer
+              enum: [-1, 0, 1]
+              description: Current user's vote
             contentType:
               type: string
               enum: ["html", "text"]

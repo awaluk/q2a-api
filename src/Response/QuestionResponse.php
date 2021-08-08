@@ -31,6 +31,7 @@ class QuestionResponse extends JsonResponse implements ResponseBodyFunctionInter
             'votes' => $this->question->getVotesSum(),
             'views' => $this->question->getViewsNumber(),
             'favourite' => $this->question->isFavouriteForLoggedUser(),
+            'userVote' => $this->question->getUserVote(),
             'closed' => $this->question->isClosed(),
             'hasBestAnswer' => $this->question->hasBestAnswer(),
             'createDate' => $this->question->getCreatedDate(),
