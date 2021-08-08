@@ -10,6 +10,9 @@ return [
     ['path' => 'questions/{question}', 'method' => 'get', 'action' => 'QuestionController::show', 'parameters' => [
         'question' => '\d+'
     ]],
+    ['path' => 'questions/{question}/vote', 'method' => 'post', 'action' => 'QuestionController::vote', 'auth' => true, 'parameters' => [
+        'question' => '\d+'
+    ]],
 
     ['path' => 'categories', 'method' => 'get', 'action' => 'CategoriesController::list'],
     ['path' => 'statistics', 'method' => 'get', 'action' => 'StatisticsController::get'],

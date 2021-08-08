@@ -254,6 +254,25 @@ paths:
         404:
           description: Invalid question id
 
+  /questions/{questionId}/vote:
+    post:
+      tags:
+        - Question
+      summary: User voting on question
+      operationId: vote
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - vote
+              properties:
+                vote:
+                  type: integer
+                  enum: [-1, 0, 1]
+
   /statistics:
     get:
       tags:
@@ -464,7 +483,28 @@ components:
           properties:
             type:
               type: string
-              enum: [question_created, answer_created, comment_created, question_updated, answer_updated, comment_updated, question_hidden, answer_hidden, comment_hidden, question_restored, answer_restored, comment_restored, question_closed, question_reopened, question_tags_updated, question_category_updated, answer_selected, comment_moved, answer_changed_to_comment]
+              enum:
+                [
+                  question_created,
+                  answer_created,
+                  comment_created,
+                  question_updated,
+                  answer_updated,
+                  comment_updated,
+                  question_hidden,
+                  answer_hidden,
+                  comment_hidden,
+                  question_restored,
+                  answer_restored,
+                  comment_restored,
+                  question_closed,
+                  question_reopened,
+                  question_tags_updated,
+                  question_category_updated,
+                  answer_selected,
+                  comment_moved,
+                  answer_changed_to_comment,
+                ]
               description: Latest action to show on list
             user:
               $ref: "#/components/schemas/InlineUserDto"
