@@ -272,6 +272,25 @@ paths:
                 vote:
                   type: integer
                   enum: [-1, 0, 1]
+      responses:
+        200:
+          description: Vote added
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - userVote
+                properties:
+                  userVote:
+                    type: integer
+                    enum: [-1, 0, 1]
+        400:
+          description: Invalid vote number
+        403:
+          description: Voting not allowed (user not logged or attempt to vote on your own question)
+        404:
+          description: Question not found
 
   /statistics:
     get:

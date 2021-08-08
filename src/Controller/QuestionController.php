@@ -36,7 +36,7 @@ class QuestionController extends AbstractController
     public function vote(int $questionId): Response
     {
         $vote = $this->request->get('vote');
-        if (!in_array($vote, array(-1, 0, 1))) {
+        if (!in_array($vote, [-1, 0, 1])) {
             throw new BadRequestHttpException();
         }
 
