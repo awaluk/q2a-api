@@ -35,8 +35,8 @@ class QuestionController extends AbstractController
     
     public function vote(int $questionId): Response
     {
-        $vote = $this->request->get('vote');
-        if (!in_array($vote, [-1, 0, 1])) {
+        $userVote = $this->request->get('vote');
+        if (!in_array($userVote, [-1, 0, 1])) {
             throw new BadRequestHttpException();
         }
 
@@ -48,12 +48,17 @@ class QuestionController extends AbstractController
         }
 
         require_once QA_INCLUDE_DIR.'app/votes.php';
-        $voteError = qa_vote_error_html($post, $vote, $userId, qa_request());
+        $voteError = qa_vote_error_html($post, $userVote, $userId, qa_request());
         if (!empty($voteError)) {
             throw new ForbiddenHttpException();
         }
 
-        qa_vote_set($post, $userId, qa_get_logged_in_handle(), $cookieId, $vote);
-        return new VoteResponse($vote);
+        qa_vote_set($post, $userId, qa_get_logged_in_handle(), $cookieId, $userVote);
+
+        $updatedPost = qa_db_select_with_pending(qa_db_full_post_selectspec($userId, $questionId));
+        $question = new QuestionDto($updatedPost);
+        $votes = $question->getVotesSum();
+
+        return new VoteResponse($userVote, $votes);
     }
 }
