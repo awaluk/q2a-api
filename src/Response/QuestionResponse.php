@@ -40,10 +40,6 @@ class QuestionResponse extends JsonResponse implements ResponseBodyFunctionInter
 
     public function data(): array
     {
-        if ($this->full === false) {
-            return $this->getPostKeys($this->question);
-        }
-    
         return array_merge(
             $this->getPostKeys($this->question),
             $this->getQuestionKeys($this->question)
