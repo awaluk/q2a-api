@@ -42,8 +42,6 @@ class QuestionController extends AbstractController
             return new AnswerDto($answerData);
         }, $answersData);
 
-        // print_r($answersData);
-
         $comments = array_map(function ($commentData) {
             return new CommentDto($commentData);
         }, $commentsData);
