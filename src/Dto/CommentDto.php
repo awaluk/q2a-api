@@ -11,6 +11,6 @@ class CommentDto extends PostDto
 
     public function getParentId()
     {
-      return (int)$this->data['parentid'];
+        return (int)$this->data['parentid'];
     }
 }

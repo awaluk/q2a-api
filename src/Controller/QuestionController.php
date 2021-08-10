@@ -34,10 +34,10 @@ class QuestionController extends AbstractController
         }
 
         list($answersData, $commentsData) = qa_db_select_with_pending(
-           qa_db_full_child_posts_selectspec($userId, $questionId),
-           qa_db_full_a_child_posts_selectspec($userId, $questionId)
+            qa_db_full_child_posts_selectspec($userId, $questionId),
+            qa_db_full_a_child_posts_selectspec($userId, $questionId)
         );
-    
+
         $answers = array_map(function ($answerData) {
             return new AnswerDto($answerData);
         }, $answersData);
@@ -46,9 +46,9 @@ class QuestionController extends AbstractController
             return new CommentDto($commentData);
         }, $commentsData);
 
-        return new QuestionResponse($question, $answers, $comments, qa_get_favorite_non_qs_map(), true);
+        return new QuestionResponse($question, $answers, $comments, qa_get_favorite_non_qs_map());
     }
-    
+
     public function vote(int $questionId): Response
     {
         $userVote = $this->request->get('vote');
@@ -63,7 +63,7 @@ class QuestionController extends AbstractController
             throw new NotFoundHttpException();
         }
 
-        require_once QA_INCLUDE_DIR.'app/votes.php';
+        require_once QA_INCLUDE_DIR . 'app/votes.php';
         $voteError = qa_vote_error_html($post, $userVote, $userId, qa_request());
         if (!empty($voteError)) {
             throw new ForbiddenHttpException();

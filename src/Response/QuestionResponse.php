@@ -15,25 +15,23 @@ class QuestionResponse extends JsonResponse implements ResponseBodyFunctionInter
     private $answers;
     private $comments;
     private $favourites;
-    private $full;
 
-     /**
+    /**
+     * @param QuestionDto $question
      * @param AnswerDto[] $answers
      * @param CommentDto[] $comments
+     * @param array $favourites
      */
     public function __construct(
         QuestionDto $question,
         array $answers,
         array $comments,
-        array $favourites = [],
-        bool $full = false
-    )
-    {
+        array $favourites = []
+    ) {
         $this->question = $question;
         $this->answers = $answers;
         $this->comments = $comments;
         $this->favourites = $favourites;
-        $this->full = $full;
 
         parent::__construct();
     }
@@ -49,6 +47,9 @@ class QuestionResponse extends JsonResponse implements ResponseBodyFunctionInter
     private function getPostKeys(PostDto $post): array
     {
         return [
+            'id' => $post->getId(),
+            'content' => $post->getContent(),
+            'contentType' => $post->hasHtmlContent() ? 'html' : 'text',
             'author' => [
                 'id' => $post->getAuthor()->getId(),
                 'name' => $post->getAuthor()->getName(),
@@ -58,10 +59,7 @@ class QuestionResponse extends JsonResponse implements ResponseBodyFunctionInter
                 'favourite' => isset($this->favourites['user'][$post->getAuthor()->getId()])
             ],
             'change' => $this->getChange($post),
-            'content' => $post->getContent(),
-            'contentType' => $post->hasHtmlContent() ? 'html' : 'text',
             'createDate' => $post->getCreatedDate(),
-            'id' => $post->getId(),
             'isHidden' => $post->isHidden(),
             'userVote' => $post->getUserVote(),
             'votesCount' => $post->getVotesSum()
@@ -70,7 +68,7 @@ class QuestionResponse extends JsonResponse implements ResponseBodyFunctionInter
 
     private function getQuestionKeys(QuestionDto $question): array
     {
-         return [
+        return [
             'answers' => $this->getAnswers(),
             'answersCount' => $question->getAnswersCount(),
             'category' => [
@@ -146,7 +144,8 @@ class QuestionResponse extends JsonResponse implements ResponseBodyFunctionInter
         ];
     }
 
-    private function getChange(PostDto $post): array {
+    private function getChange(PostDto $post): array
+    {
         return [
             'type' => $this->getLatestChangeType($post),
             'user' => $post->hasOriginal('ouserid') && $post->getOriginal('oupdatetype') !== null

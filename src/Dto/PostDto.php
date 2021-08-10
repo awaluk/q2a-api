@@ -61,13 +61,13 @@ class PostDto implements DtoInterface
 
     public function getContent(): string
     {
-        // TODO Usunąć sprawdzenie hasOriginal po dodaniu InlineQuestionDto
+        // TODO remove hasOriginal usage when InlineQuestionDto will be created
         return $this->hasOriginal('content') ? $this->data['content'] : '';
     }
 
     public function hasHtmlContent(): bool
     {
-        // TODO Usunąć sprawdzenie hasOriginal po dodaniu InlineQuestionDto
+        // TODO remove hasOriginal usage when InlineQuestionDto will be created
         return $this->hasOriginal('format') && $this->data['format'] === 'html';
     }
 
@@ -81,7 +81,7 @@ class PostDto implements DtoInterface
         return $this->authorDto;
     }
 
-    public function getUserVote(): int 
+    public function getUserVote(): int
     {
         return $this->data['uservote'] ?? 0;
     }
