@@ -38,6 +38,14 @@ class QuestionController extends AbstractController
             qa_db_full_a_child_posts_selectspec($userId, $questionId)
         );
 
+        if (qa_opt('sort_answers_by') === 'votes') {
+            foreach ($answersData as $answerId => $answer) {
+                $answersData[$answerId]['sortvotes'] = $answer['downvotes'] - $answer['upvotes'];
+            }
+            qa_sort_by($answersData, 'sortvotes', 'created');
+        } else {
+            qa_sort_by($answersData, 'created');
+        }
         $answers = array_map(function ($answerData) {
             return new AnswerDto($answerData);
         }, $answersData);
