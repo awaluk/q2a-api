@@ -82,6 +82,7 @@ paths:
                   message:
                     type: string
                     example: Already logged in
+
   /logout:
     post:
       tags:
@@ -198,6 +199,7 @@ paths:
                       $ref: "#/components/schemas/InlineQuestionDto"
                   pagination:
                     $ref: "#/components/schemas/PaginationDto"
+
   /questions/home:
     get:
       tags:
@@ -214,6 +216,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/InlineQuestionDto"
+
   /questions/activity:
     get:
       tags:
@@ -237,6 +240,7 @@ paths:
         - Question
       parameters:
         - in: path
+          required: true
           name: questionId
           schema:
             type: integer
@@ -258,6 +262,12 @@ paths:
     post:
       tags:
         - Question
+      parameters:
+        - in: path
+          required: true
+          name: questionId
+          schema:
+            type: integer
       summary: User voting on question
       operationId: vote
       requestBody:
@@ -445,127 +455,8 @@ components:
             description: "Category name"
 
     InlineQuestionDto:
-      required:
-        - id
-        - title
-        - slug
-        - answers
-        - votes
-        - views
-        - userVote
-        - favourite
-        - closed
-        - hasBestAnswer
-        - tags
-        - category
-        - change
-      properties:
-        id:
-          type: integer
-          example: 1
-        title:
-          type: string
-          example: Example question
-        slug:
-          type: string
-          example: example-question
-        answers:
-          type: integer
-          example: 5
-          description: Number of answers for question
-        votes:
-          type: integer
-          example: 2
-          description: Votes sum. For example 1 downvote and 3 upvotes gives 2.
-        views:
-          type: integer
-          example: 100
-        userVote:
-          type: integer
-          enum: [-1, 0, 1]
-          description: Current user's vote
-        favourite:
-          type: boolean
-          example: false
-          description: Is the question marked as favourite by logged user. Always `false` for not logged.
-        closed:
-          type: boolean
-          example: false
-          description: Question closed or open
-        hasBestAnswer:
-          type: boolean
-          example: false
-          description: Question has selected best answer
-        tags:
-          type: array
-          items:
-            $ref: "#/components/schemas/InlineTagDto"
-        category:
-          $ref: "#/components/schemas/InlineCategoryDto"
-        change:
-          type: object
-          required:
-            - type
-            - date
-          properties:
-            type:
-              type: string
-              enum:
-                [
-                  question_created,
-                  answer_created,
-                  comment_created,
-                  question_updated,
-                  answer_updated,
-                  comment_updated,
-                  question_hidden,
-                  answer_hidden,
-                  comment_hidden,
-                  question_restored,
-                  answer_restored,
-                  comment_restored,
-                  question_closed,
-                  question_reopened,
-                  question_tags_updated,
-                  question_category_updated,
-                  answer_selected,
-                  comment_moved,
-                  answer_changed_to_comment,
-                ]
-              description: Latest action to show on list
-            user:
-              $ref: "#/components/schemas/InlineUserDto"
-            date:
-              type: string
-              example: "2021-07-17T20:15:30+00:00"
-              description: Date of action
-            showItemId:
-              type: integer
-              example: 5
-              description: Id of latest answer or comment for link to question details page
-
-    QuestionDto:
       allOf:
-        - $ref: "#/components/schemas/InlineQuestionDto"
-        - type: object
-          required:
-            - isHidden
-            - contentType
-            - content
-          properties:
-            author:
-              $ref: "#/components/schemas/InlineUserDto"
-            isHidden:
-              type: boolean
-              default: false
-            contentType:
-              type: string
-              enum: ["html", "text"]
-              example: "html"
-            content:
-              type: string
-              example: "<p>Lorem ipsum dolor…</p>"
-              description: Format depends on `contentType` field
+        - $ref: "#/components/schemas/PostDto"
 
     InlineTagDto:
       type: object
@@ -673,6 +564,143 @@ components:
           type: integer
           example: 3
           description: "Number of next page. `null` means that current page is last"
+
+    PostDto:
+      type: object
+      required:
+        - author
+        - change
+        - content
+        - contentType
+        - createDate
+        - id
+        - isHidden
+        - userVote
+        - votesCount
+      properties:
+        id:
+          type: integer
+        author:
+          $ref: "#/components/schemas/InlineUserDto"
+        change:
+          type: object
+          required:
+            - type
+            - date
+          properties:
+            type:
+              type: string
+              enum:
+                [
+                  question_created,
+                  answer_created,
+                  comment_created,
+                  question_updated,
+                  answer_updated,
+                  comment_updated,
+                  question_hidden,
+                  answer_hidden,
+                  comment_hidden,
+                  question_restored,
+                  answer_restored,
+                  comment_restored,
+                  question_closed,
+                  question_reopened,
+                  question_tags_updated,
+                  question_category_updated,
+                  answer_selected,
+                  comment_moved,
+                  answer_changed_to_comment,
+                ]
+              description: Latest action to show on list
+            user:
+              $ref: "#/components/schemas/InlineUserDto"
+            date:
+              type: string
+              example: "2021-07-17T20:15:30+00:00"
+              description: Date of action
+            showItemId:
+              type: integer
+              example: 5
+              description: Id of latest answer or comment for link to question details page
+        content:
+          type: string
+          description: Format depends on `contentType` field
+        contentType:
+          type: string
+          enum: ["html", "text"]
+        createDate:
+          type: string
+          example: "2021-07-17T20:15:30+00:00"
+        isHidden:
+          type: boolean
+          default: false
+        userVote:
+          type: integer
+          enum: [-1, 0, 1]
+        votesCount:
+          type: integer
+          description: Votes sum. For example 1 downvote and 3 upvotes gives 2.
+
+    QuestionDto:
+      allOf:
+        - $ref: "#/components/schemas/PostDto"
+        - type: object
+          required:
+            - answers
+            - answersCount
+            - category
+            - closed
+            - favourite
+            - hasBestAnswer
+            - slug
+            - tags
+            - title
+            - viewsCount
+          properties:
+            answers:
+              type: array
+              items:
+                $ref: "#/components/schemas/AnswerDto"
+            answersCount:
+              type: number
+            category:
+              $ref: "#/components/schemas/InlineCategoryDto"
+            closed:
+              type: boolean
+            favourite:
+              type: boolean
+            hasBestAnswer:
+              type: boolean
+            slug:
+              type: string
+            tags:
+              type: array
+              items:
+                $ref: "#/components/schemas/InlineTagDto"
+            title:
+              type: string
+            viewsCount:
+              type: number
+
+    CommentDto:
+      allOf:
+        - $ref: "#/components/schemas/PostDto"
+
+    AnswerDto:
+      allOf:
+        - $ref: "#/components/schemas/PostDto"
+        - type: object
+          required:
+            - comments
+            - isBestAnswer
+          properties:
+            comments:
+              type: array
+              items:
+                $ref: "#/components/schemas/CommentDto"
+            isBestAnswer:
+              type: boolean
 
   securitySchemes:
     q2aSession:

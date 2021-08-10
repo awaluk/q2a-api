@@ -26,7 +26,8 @@ class QuestionsListResponse extends JsonResponse implements ResponseBodyFunction
     {
         $data = [];
         foreach ($this->questions as $question) {
-            $data[] = (new QuestionResponse(new QuestionDto($question), $this->favourites))->data();
+            // TODO Zrobić InlineQuestionDto
+            $data[] = (new QuestionResponse(new QuestionDto($question), [], [], $this->favourites))->data();
         }
 
         if ($this->paginator === null) {

@@ -7,7 +7,6 @@ use Q2aApi\Helper\QuestionHelper;
 class QuestionDto extends PostDto
 {
     private $categoryDto;
-    private $authorDto;
 
     public function __construct(array $data)
     {
@@ -18,7 +17,6 @@ class QuestionDto extends PostDto
             'title' => $this->data['categoryname'],
             'backpath' => $this->data['categorybackpath']
         ]);
-        $this->authorDto = new UserDto($this->data);
     }
 
     public function getTitle(): string
@@ -56,6 +54,11 @@ class QuestionDto extends PostDto
         return $this->data['selchildid'] !== null;
     }
 
+    public function getBestAnswerId(): ?int
+    {
+        return $this->data['selchildid'];
+    }
+
     public function getTags(): array
     {
         return QuestionHelper::tagsStringToArray($this->data['tags']);
@@ -64,15 +67,5 @@ class QuestionDto extends PostDto
     public function getCategory(): CategoryDto
     {
         return $this->categoryDto;
-    }
-
-    public function getAuthor(): UserDto
-    {
-        return $this->authorDto;
-    }
-
-    public function getUserVote(): int 
-    {
-        return $this->data['uservote'] ?? 0;
     }
 }

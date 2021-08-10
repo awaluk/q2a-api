@@ -4,6 +4,8 @@ namespace Q2aApi\Controller;
 
 use Q2aApi\Base\AbstractController;
 use Q2aApi\Dto\QuestionDto;
+use Q2aApi\Dto\AnswerDto;
+use Q2aApi\Dto\CommentDto;
 use Q2aApi\Exception\ForbiddenHttpException;
 use Q2aApi\Exception\NotFoundHttpException;
 use Q2aApi\Exception\BadRequestHttpException;
@@ -20,6 +22,7 @@ class QuestionController extends AbstractController
         if ($questionData === null || $questionData['basetype'] !== QuestionDto::TYPE_QUESTION) {
             throw new NotFoundHttpException();
         }
+
         $question = new QuestionDto($questionData);
 
         $createdByUser = qa_post_is_by_user($questionData, $userId, qa_cookie_get());
@@ -30,7 +33,22 @@ class QuestionController extends AbstractController
             throw new ForbiddenHttpException();
         }
 
-        return new QuestionResponse($question, qa_get_favorite_non_qs_map(), true);
+        list($answersData, $commentsData) = qa_db_select_with_pending(
+           qa_db_full_child_posts_selectspec($userId, $questionId),
+           qa_db_full_a_child_posts_selectspec($userId, $questionId)
+        );
+    
+        $answers = array_map(function ($answerData) {
+            return new AnswerDto($answerData);
+        }, $answersData);
+
+        // print_r($answersData);
+
+        $comments = array_map(function ($commentData) {
+            return new CommentDto($commentData);
+        }, $commentsData);
+
+        return new QuestionResponse($question, $answers, $comments, qa_get_favorite_non_qs_map(), true);
     }
     
     public function vote(int $questionId): Response
