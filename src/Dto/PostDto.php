@@ -62,7 +62,7 @@ class PostDto implements DtoInterface
     public function getContent(): string
     {
         // TODO Usunąć sprawdzenie hasOriginal po dodaniu InlineQuestionDto
-        return $this->hasOriginal('format') && $this->data['content'];
+        return $this->hasOriginal('content') ? $this->data['content'] : '';
     }
 
     public function hasHtmlContent(): bool
