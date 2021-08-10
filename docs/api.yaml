@@ -456,7 +456,7 @@ components:
 
     InlineQuestionDto:
       allOf:
-        - $ref: "#/components/schemas/PostDto"
+        - $ref: "#/components/schemas/QuestionDto"
 
     InlineTagDto:
       type: object
