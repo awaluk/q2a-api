@@ -11,10 +11,12 @@ class PostDto implements DtoInterface
     const TYPE_COMMENT = 'C';
 
     protected $data;
+    private $authorDto;
 
     public function __construct(array $data)
     {
         $this->data = $data;
+        $this->authorDto = new UserDto($this->data);
     }
 
     public function hasOriginal(string $key)
@@ -59,16 +61,28 @@ class PostDto implements DtoInterface
 
     public function getContent(): string
     {
-        return $this->data['content'];
+        // TODO remove hasOriginal usage when InlineQuestionDto will be created
+        return $this->hasOriginal('content') ? $this->data['content'] : '';
     }
 
     public function hasHtmlContent(): bool
     {
-        return $this->data['format'] === 'html';
+        // TODO remove hasOriginal usage when InlineQuestionDto will be created
+        return $this->hasOriginal('format') && $this->data['format'] === 'html';
     }
 
     public function getCreatedDate(): string
     {
         return date('c', $this->data['created']);
+    }
+
+    public function getAuthor(): UserDto
+    {
+        return $this->authorDto;
+    }
+
+    public function getUserVote(): int
+    {
+        return $this->data['uservote'] ?? 0;
     }
 }

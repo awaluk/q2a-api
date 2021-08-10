@@ -4,6 +4,8 @@ namespace Q2aApi\Controller;
 
 use Q2aApi\Base\AbstractController;
 use Q2aApi\Dto\QuestionDto;
+use Q2aApi\Dto\AnswerDto;
+use Q2aApi\Dto\CommentDto;
 use Q2aApi\Exception\ForbiddenHttpException;
 use Q2aApi\Exception\NotFoundHttpException;
 use Q2aApi\Exception\BadRequestHttpException;
@@ -20,6 +22,7 @@ class QuestionController extends AbstractController
         if ($questionData === null || $questionData['basetype'] !== QuestionDto::TYPE_QUESTION) {
             throw new NotFoundHttpException();
         }
+
         $question = new QuestionDto($questionData);
 
         $createdByUser = qa_post_is_by_user($questionData, $userId, qa_cookie_get());
@@ -30,9 +33,30 @@ class QuestionController extends AbstractController
             throw new ForbiddenHttpException();
         }
 
-        return new QuestionResponse($question, qa_get_favorite_non_qs_map(), true);
+        list($answersData, $commentsData) = qa_db_select_with_pending(
+            qa_db_full_child_posts_selectspec($userId, $questionId),
+            qa_db_full_a_child_posts_selectspec($userId, $questionId)
+        );
+
+        if (qa_opt('sort_answers_by') === 'votes') {
+            foreach ($answersData as $answerId => $answer) {
+                $answersData[$answerId]['sortvotes'] = $answer['downvotes'] - $answer['upvotes'];
+            }
+            qa_sort_by($answersData, 'sortvotes', 'created');
+        } else {
+            qa_sort_by($answersData, 'created');
+        }
+        $answers = array_map(function ($answerData) {
+            return new AnswerDto($answerData);
+        }, $answersData);
+
+        $comments = array_map(function ($commentData) {
+            return new CommentDto($commentData);
+        }, $commentsData);
+
+        return new QuestionResponse($question, $answers, $comments, qa_get_favorite_non_qs_map());
     }
-    
+
     public function vote(int $questionId): Response
     {
         $userVote = $this->request->get('vote');
@@ -47,7 +71,7 @@ class QuestionController extends AbstractController
             throw new NotFoundHttpException();
         }
 
-        require_once QA_INCLUDE_DIR.'app/votes.php';
+        require_once QA_INCLUDE_DIR . 'app/votes.php';
         $voteError = qa_vote_error_html($post, $userVote, $userId, qa_request());
         if (!empty($voteError)) {
             throw new ForbiddenHttpException();
