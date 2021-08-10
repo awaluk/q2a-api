@@ -281,10 +281,13 @@ paths:
                 type: object
                 required:
                   - userVote
+                  - votes
                 properties:
                   userVote:
                     type: integer
                     enum: [-1, 0, 1]
+                  votes:
+                    type: integer
         400:
           description: Invalid vote number
         403:
