@@ -144,10 +144,15 @@ class QuestionResponse extends JsonResponse implements ResponseBodyFunctionInter
         ];
     }
 
-    private function getChange(PostDto $post): array
+    private function getChange(PostDto $post): ?array
     {
+        $type = $this->getLatestChangeType($post);
+        if (in_array($type, ['question_created', 'comment_created', 'answer_created'])) {
+            return null;
+        }
+
         return [
-            'type' => $this->getLatestChangeType($post),
+            'type' => $type,
             'user' => $post->hasOriginal('ouserid') && $post->getOriginal('oupdatetype') !== null
                 ? ($post->getOriginal('ouserid') !== null ? $this->getUser($post, 'o') : null)
                 : ($post->getOriginal('userid') !== null ? $this->getUser($post) : null),
@@ -176,8 +181,8 @@ class QuestionResponse extends JsonResponse implements ResponseBodyFunctionInter
 
         $type = $post->getOriginal('obasetype') ?? $post->getType();
 
-        if (!empty($post->getOriginal('oupdatetype'))) {
-            $type .= '_' . $post->getOriginal('oupdatetype');
+        if (!empty($post->getOriginal('updatetype'))) {
+            $type .= '_' . $post->getOriginal('updatetype');
         }
 
         if ($type === 'Q_C' && $post instanceof QuestionDto) {
