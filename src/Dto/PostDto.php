@@ -16,7 +16,9 @@ class PostDto implements DtoInterface
     public function __construct(array $data)
     {
         $this->data = $data;
-        $this->authorDto = new UserDto($this->data);
+        $this->authorDto = empty($this->data['userid'])
+            ? null
+            : new UserDto($this->data);
     }
 
     public function hasOriginal(string $key)
@@ -76,7 +78,7 @@ class PostDto implements DtoInterface
         return date('c', $this->data['created']);
     }
 
-    public function getAuthor(): UserDto
+    public function getAuthor(): ?UserDto
     {
         return $this->authorDto;
     }

@@ -5,12 +5,10 @@ namespace Q2aApi\Dto;
 class UserDto implements DtoInterface
 {
     protected $data;
-    protected $q2aOptions;
 
     public function __construct(array $data)
     {
         $this->data = $data;
-        $this->q2aOptions = qa_post_html_options($this->data);
     }
 
     public function hasOriginal(string $key)
@@ -43,9 +41,12 @@ class UserDto implements DtoInterface
         return (int)$this->data['points'];
     }
 
-    public function getPointsTitle()
+    public function getPointsTitle(): ?string
     {
-        return qa_get_points_title_html($this->data['points'], $this->q2aOptions['pointstitle']);
+        return qa_get_points_title_html(
+            $this->getPoints(),
+            qa_get_points_to_titles()
+        );
     }
 
     public function getLevel(): int
