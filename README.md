@@ -2,7 +2,7 @@
 
 Adds simple API to serve some data as JSON.
 
-Tested on **Q2A version >= 1.7.0 and PHP >= 7.0**. Requires [Composer](https://getcomposer.org/) to installation. Code style adjusted to Q2A style.
+Tested on **Q2A version >= 1.7.0 and PHP >= 7.1**. Requires [Composer](https://getcomposer.org/) to installation. Code style adjusted to Q2A style.
 
 ## Available endpoints
 
@@ -31,5 +31,5 @@ Go to Q2A admin panel, open "Plugins" tab (`/admin/plugins`), find "Q2A API" and
 ## Development information
 
 - Plugin metadata are store in `metadata.json` and `qa-plugin.php`
-- Plugin should work on PHP version 7.0 and higher
+- Plugin should work on PHP version 7.1 and higher
 - Code should follow to PSR-12 standard, run `composer run phpcs` to check it

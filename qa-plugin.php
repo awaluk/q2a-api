@@ -11,7 +11,7 @@
     Plugin License: MIT
     Plugin Update Check URI: https://raw.githubusercontent.com/awaluk/q2a-api/master/metadata.json
     Plugin Minimum Question2Answer Version: 1.7
-    Plugin Minimum PHP Version: 7.0
+    Plugin Minimum PHP Version: 7.1
 */
 
 if (!defined('QA_VERSION')) {

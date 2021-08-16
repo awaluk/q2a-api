@@ -16,7 +16,9 @@ class PostDto implements DtoInterface
     public function __construct(array $data)
     {
         $this->data = $data;
-        $this->authorDto = new UserDto($this->data);
+        $this->authorDto = empty($this->data['userid'])
+            ? null
+            : new UserDto($this->data);
     }
 
     public function hasOriginal(string $key)
@@ -61,13 +63,11 @@ class PostDto implements DtoInterface
 
     public function getContent(): string
     {
-        // TODO remove hasOriginal usage when InlineQuestionDto will be created
         return $this->hasOriginal('content') ? $this->data['content'] : '';
     }
 
     public function hasHtmlContent(): bool
     {
-        // TODO remove hasOriginal usage when InlineQuestionDto will be created
         return $this->hasOriginal('format') && $this->data['format'] === 'html';
     }
 
@@ -76,7 +76,7 @@ class PostDto implements DtoInterface
         return date('c', $this->data['created']);
     }
 
-    public function getAuthor(): UserDto
+    public function getAuthor(): ?UserDto
     {
         return $this->authorDto;
     }
