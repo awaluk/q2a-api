@@ -4,10 +4,13 @@ namespace Q2aApi\Service;
 
 use Q2aApi\Dto\UserDto;
 
-require_once QA_INCLUDE_DIR . 'db/users.php';
-
 class UserService
 {
+    public function __construct()
+    {
+        require_once QA_INCLUDE_DIR . 'db/users.php';
+    }
+
     public function getById(?string $userId): ?UserDto
     {
         if (empty($userId)) {

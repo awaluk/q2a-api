@@ -148,11 +148,8 @@ class QuestionResponse extends JsonResponse implements ResponseBodyFunctionInter
 
     private function getChange(PostDto $post): ?array
     {
-        if (in_array($this->postService->getLatestActionType($post), [
-            'question_created',
-            'answer_created',
-            'comment_created'
-        ])) {
+        $createEvents = ['question_created', 'answer_created', 'comment_created'];
+        if (in_array($this->postService->getLatestActionType($post), $createEvents)) {
             return null;
         }
         $updateType = $post->getOriginal('oupdatetype') ?? $post->getOriginal('updatetype');
