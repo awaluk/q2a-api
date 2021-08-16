@@ -455,8 +455,63 @@ components:
             description: "Category name"
 
     InlineQuestionDto:
-      allOf:
-        - $ref: "#/components/schemas/QuestionDto"
+      required:
+        - id
+        - title
+        - slug
+        - answersCount
+        - votesCount
+        - viewsCount
+        - favourite
+        - closed
+        - hasBestAnswer
+        - tags
+        - category
+        - change
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Example question
+        slug:
+          type: string
+          example: example-question
+        answersCount:
+          type: integer
+          example: 5
+          description: Number of answers for question
+        votesCount:
+          type: integer
+          example: 2
+          description: Votes sum. For example 1 downvote and 3 upvotes gives 2.
+        viewsCount:
+          type: integer
+          example: 100
+        favourite:
+          type: boolean
+          example: false
+          description: Is the question marked as favourite by logged user. Always `false` for not logged.
+        closed:
+          type: boolean
+          example: false
+          description: Question closed or open
+        hasBestAnswer:
+          type: boolean
+          example: false
+          description: Question has selected best answer
+        createDate:
+          type: string
+          example: "2021-07-17T20:15:30+00:00"
+        tags:
+          type: array
+          items:
+            $ref: "#/components/schemas/InlineTagDto"
+        category:
+          $ref: "#/components/schemas/InlineCategoryDto"
+        change:
+          $ref: "#/components/schemas/ChangeDto"
 
     InlineTagDto:
       type: object
@@ -569,7 +624,6 @@ components:
       type: object
       required:
         - author
-        - change
         - content
         - contentType
         - createDate
@@ -583,46 +637,7 @@ components:
         author:
           $ref: "#/components/schemas/InlineUserDto"
         change:
-          type: object
-          required:
-            - type
-            - date
-          properties:
-            type:
-              type: string
-              enum:
-                [
-                  question_created,
-                  answer_created,
-                  comment_created,
-                  question_updated,
-                  answer_updated,
-                  comment_updated,
-                  question_hidden,
-                  answer_hidden,
-                  comment_hidden,
-                  question_restored,
-                  answer_restored,
-                  comment_restored,
-                  question_closed,
-                  question_reopened,
-                  question_tags_updated,
-                  question_category_updated,
-                  answer_selected,
-                  comment_moved,
-                  answer_changed_to_comment,
-                ]
-              description: Latest action to show on list
-            user:
-              $ref: "#/components/schemas/InlineUserDto"
-            date:
-              type: string
-              example: "2021-07-17T20:15:30+00:00"
-              description: Date of action
-            showItemId:
-              type: integer
-              example: 5
-              description: Id of latest answer or comment for link to question details page
+          $ref: "#/components/schemas/ChangeDto"
         content:
           type: string
           description: Format depends on `contentType` field
@@ -641,6 +656,48 @@ components:
         votesCount:
           type: integer
           description: Votes sum. For example 1 downvote and 3 upvotes gives 2.
+
+    ChangeDto:
+      type: object
+      required:
+        - type
+        - date
+      properties:
+        type:
+          type: string
+          enum:
+            [
+                question_created,
+                answer_created,
+                comment_created,
+                question_updated,
+                answer_updated,
+                comment_updated,
+                question_hidden,
+                answer_hidden,
+                comment_hidden,
+                question_restored,
+                answer_restored,
+                comment_restored,
+                question_closed,
+                question_reopened,
+                question_tags_updated,
+                question_category_updated,
+                answer_selected,
+                comment_moved,
+                answer_changed_to_comment,
+            ]
+          description: Latest action to show on list
+        user:
+          $ref: "#/components/schemas/InlineUserDto"
+        date:
+          type: string
+          example: "2021-07-17T20:15:30+00:00"
+          description: Date of action
+        showItemId:
+          type: integer
+          example: 5
+          description: Id of latest answer or comment for link to question details page
 
     QuestionDto:
       allOf:

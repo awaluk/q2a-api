@@ -63,13 +63,11 @@ class PostDto implements DtoInterface
 
     public function getContent(): string
     {
-        // TODO remove hasOriginal usage when InlineQuestionDto will be created
         return $this->hasOriginal('content') ? $this->data['content'] : '';
     }
 
     public function hasHtmlContent(): bool
     {
-        // TODO remove hasOriginal usage when InlineQuestionDto will be created
         return $this->hasOriginal('format') && $this->data['format'] === 'html';
     }
 

@@ -9,6 +9,7 @@ use Q2aApi\Dto\PostDto;
 use Q2aApi\Dto\UserDto;
 use Q2aApi\Http\JsonResponse;
 use Q2aApi\Http\ResponseBodyFunctionInterface;
+use Q2aApi\Service\PostService;
 use Q2aApi\Service\UserService;
 
 class QuestionResponse extends JsonResponse implements ResponseBodyFunctionInterface
@@ -17,6 +18,8 @@ class QuestionResponse extends JsonResponse implements ResponseBodyFunctionInter
     private $answers;
     private $comments;
     private $favourites;
+    private $userService;
+    private $postService;
 
     /**
      * @param QuestionDto $question
@@ -35,6 +38,7 @@ class QuestionResponse extends JsonResponse implements ResponseBodyFunctionInter
         $this->comments = $comments;
         $this->favourites = $favourites;
         $this->userService = new UserService();
+        $this->postService = new PostService();
 
         parent::__construct();
     }
@@ -107,7 +111,6 @@ class QuestionResponse extends JsonResponse implements ResponseBodyFunctionInter
         ];
     }
 
-
     private function getAnswers(): array
     {
         $answers = array_map(function ($answer) {
@@ -145,7 +148,18 @@ class QuestionResponse extends JsonResponse implements ResponseBodyFunctionInter
 
     private function getChange(PostDto $post): ?array
     {
-        $prefix = $post->hasOriginal('oupdatetype') ? '' : 'o';
+        if (in_array($this->postService->getLatestActionType($post), [
+            'question_created',
+            'answer_created',
+            'comment_created'
+        ])) {
+            return null;
+        }
+        $updateType = $post->getOriginal('oupdatetype') ?? $post->getOriginal('updatetype');
+        if ($updateType === 'E' && ($post->getOriginal('updated') - $post->getOriginal('created') < 300)) {
+            return null;
+        }
+
         $changeUserHandle = $post->hasOriginal('ohandle')
             ? $post->getOriginal('ohandle')
             : $post->getOriginal('lasthandle');
@@ -153,45 +167,10 @@ class QuestionResponse extends JsonResponse implements ResponseBodyFunctionInter
         $changeUser = $this->userService->getByHandle($changeUserHandle);
 
         return [
-            'type' => $this->getLatestChangeType($post),
+            'type' => $this->postService->getLatestActionType($post),
             'user' => $this->getUserKeys($changeUser),
-            'date' => date('c', $post->getOriginal('otime') ?? $post->getOriginal('created')),
-            'showItemId' => (int)$post->getOriginal($prefix . 'postid')
+            'date' => date('c', $post->getOriginal('updated')),
+            'showItemId' => null
         ];
-    }
-
-    private function getLatestChangeType(PostDto $post): string
-    {
-        $actions = [
-            'C_Y' => 'answer_changed_to_comment',
-            'C_M' => 'comment_moved',
-            'A_S' => 'answer_selected',
-            'Q_A' => 'question_category_updated',
-            'Q_T' => 'question_tags_updated',
-            'C_E' => 'comment_updated',
-            'A_E' => 'answer_updated',
-            'Q_E' => 'question_updated',
-            'C' => 'comment_created',
-            'A' => 'answer_created',
-            'Q' => 'question_created',
-        ];
-
-        $type = $post->getOriginal('obasetype') ?? $post->getType();
-        $updateType = $post->getOriginal('oupdatetype') ?? $post->getOriginal('updatetype');
-
-        if (!empty($updateType)) {
-            $type .= '_' . $updateType;
-        }
-
-        if ($type === 'Q_C' && $post instanceof QuestionDto) {
-            return $post->isClosed() ? 'question_closed' : 'question_reopened';
-        }
-
-        if (in_array($type, ['Q_H', 'A_H', 'C_H'])) {
-            $suffix = $post->isHidden() ? '_hidden' : '_restored';
-            return ($type === 'Q_H' ? 'question' : ($type === 'A_H' ? 'answer' : 'comment')) . $suffix;
-        }
-
-        return $actions[$type];
     }
 }
