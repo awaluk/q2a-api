@@ -1,8 +1,8 @@
 <?php
 
-namespace Q2aApi\Dto;
+namespace Q2aApi\Model;
 
-interface DtoInterface
+interface ModelInterface
 {
     public function hasOriginal(string $key);
 

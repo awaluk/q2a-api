@@ -1,8 +1,8 @@
 <?php
 
-namespace Q2aApi\Dto;
+namespace Q2aApi\Model\Post;
 
-class AnswerDto extends PostDto
+class Answer extends Post
 {
     public function __construct(array $data)
     {

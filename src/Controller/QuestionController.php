@@ -3,9 +3,9 @@
 namespace Q2aApi\Controller;
 
 use Q2aApi\Base\AbstractController;
-use Q2aApi\Dto\QuestionDto;
-use Q2aApi\Dto\AnswerDto;
-use Q2aApi\Dto\CommentDto;
+use Q2aApi\Model\Post\Question;
+use Q2aApi\Model\Post\Answer;
+use Q2aApi\Model\Post\Comment;
 use Q2aApi\Exception\ForbiddenHttpException;
 use Q2aApi\Exception\NotFoundHttpException;
 use Q2aApi\Exception\BadRequestHttpException;
@@ -19,11 +19,11 @@ class QuestionController extends AbstractController
     {
         $userId = qa_get_logged_in_userid();
         $questionData = qa_db_select_with_pending(qa_db_full_post_selectspec($userId, $questionId));
-        if ($questionData === null || $questionData['basetype'] !== QuestionDto::TYPE_QUESTION) {
+        if ($questionData === null || $questionData['basetype'] !== Question::TYPE_QUESTION) {
             throw new NotFoundHttpException();
         }
 
-        $question = new QuestionDto($questionData);
+        $question = new Question($questionData);
 
         $createdByUser = qa_post_is_by_user($questionData, $userId, qa_cookie_get());
         $canHideShow = qa_user_permit_error($createdByUser ? null : 'permit_hide_show');
@@ -47,11 +47,11 @@ class QuestionController extends AbstractController
             qa_sort_by($answersData, 'created');
         }
         $answers = array_map(function ($answerData) {
-            return new AnswerDto($answerData);
+            return new Answer($answerData);
         }, $answersData);
 
         $comments = array_map(function ($commentData) {
-            return new CommentDto($commentData);
+            return new Comment($commentData);
         }, $commentsData);
 
         return new QuestionResponse($question, $answers, $comments, qa_get_favorite_non_qs_map());
@@ -67,7 +67,7 @@ class QuestionController extends AbstractController
         $userId = qa_get_logged_in_userid();
         $cookieId = qa_cookie_get();
         $post = qa_db_select_with_pending(qa_db_full_post_selectspec($userId, $questionId));
-        if ($post === null || $post['basetype'] !== QuestionDto::TYPE_QUESTION) {
+        if ($post === null || $post['basetype'] !== Question::TYPE_QUESTION) {
             throw new NotFoundHttpException();
         }
 
@@ -80,7 +80,7 @@ class QuestionController extends AbstractController
         qa_vote_set($post, $userId, qa_get_logged_in_handle(), $cookieId, $userVote);
 
         $updatedPost = qa_db_select_with_pending(qa_db_full_post_selectspec($userId, $questionId));
-        $question = new QuestionDto($updatedPost);
+        $question = new Question($updatedPost);
         $votes = $question->getVotesSum();
 
         return new VoteResponse($userVote, $votes);

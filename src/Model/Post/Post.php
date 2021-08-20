@@ -1,10 +1,12 @@
 <?php
 
-namespace Q2aApi\Dto;
+namespace Q2aApi\Model\Post;
 
 use Q2aApi\Helper\PostHelper;
+use Q2aApi\Model\ModelInterface;
+use Q2aApi\Model\User;
 
-class PostDto implements DtoInterface
+abstract class Post implements ModelInterface
 {
     const TYPE_QUESTION = 'Q';
     const TYPE_ANSWER = 'A';
@@ -18,7 +20,7 @@ class PostDto implements DtoInterface
         $this->data = $data;
         $this->authorDto = empty($this->data['userid'])
             ? null
-            : new UserDto($this->data);
+            : new User($this->data);
     }
 
     public function hasOriginal(string $key)
@@ -76,7 +78,7 @@ class PostDto implements DtoInterface
         return date('c', $this->data['created']);
     }
 
-    public function getAuthor(): ?UserDto
+    public function getAuthor(): ?User
     {
         return $this->authorDto;
     }

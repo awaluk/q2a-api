@@ -3,7 +3,7 @@
 namespace Q2aApi\Response;
 
 use Q2aApi\Base\Paginator;
-use Q2aApi\Dto\QuestionDto;
+use Q2aApi\Model\Post\Question;
 use Q2aApi\Http\JsonResponse;
 use Q2aApi\Http\ResponseBodyFunctionInterface;
 use Q2aApi\Service\PostService;
@@ -29,7 +29,7 @@ class QuestionsListResponse extends JsonResponse implements ResponseBodyFunction
     {
         $data = [];
         foreach ($this->questions as $question) {
-            $data[] = $this->getQuestionData(new QuestionDto($question));
+            $data[] = $this->getQuestionData(new Question($question));
         }
 
         if ($this->paginator === null) {
@@ -50,7 +50,7 @@ class QuestionsListResponse extends JsonResponse implements ResponseBodyFunction
         ];
     }
 
-    private function getQuestionData(QuestionDto $question): array
+    private function getQuestionData(Question $question): array
     {
         return [
             'id' => $question->getId(),
@@ -88,7 +88,7 @@ class QuestionsListResponse extends JsonResponse implements ResponseBodyFunction
         ];
     }
 
-    private function getUser(QuestionDto $question, string $prefix = ''): array
+    private function getUser(Question $question, string $prefix = ''): array
     {
         $options = qa_post_html_options($question->getOriginals());
 

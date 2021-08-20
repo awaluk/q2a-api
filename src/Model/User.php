@@ -1,8 +1,8 @@
 <?php
 
-namespace Q2aApi\Dto;
+namespace Q2aApi\Model;
 
-class UserDto implements DtoInterface
+class User implements ModelInterface
 {
     protected $data;
 

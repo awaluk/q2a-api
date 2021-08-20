@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Q2aApi\Service;
 
-use Q2aApi\Dto\PostDto;
-use Q2aApi\Dto\QuestionDto;
+use Q2aApi\Model\Post\Post;
+use Q2aApi\Model\Post\Question;
 
 class PostService
 {
-    public function getLatestActionType(PostDto $post): string
+    public function getLatestActionType(Post $post): string
     {
         $actions = [
             'C_Y' => 'answer_changed_to_comment',
@@ -32,7 +32,7 @@ class PostService
             $type .= '_' . $updateType;
         }
 
-        if ($type === 'Q_C' && $post instanceof QuestionDto) {
+        if ($type === 'Q_C' && $post instanceof Question) {
             return $post->isClosed() ? 'question_closed' : 'question_reopened';
         }
 

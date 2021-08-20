@@ -2,11 +2,11 @@
 
 namespace Q2aApi\Response;
 
-use Q2aApi\Dto\QuestionDto;
-use Q2aApi\Dto\AnswerDto;
-use Q2aApi\Dto\CommentDto;
-use Q2aApi\Dto\PostDto;
-use Q2aApi\Dto\UserDto;
+use Q2aApi\Model\Post\Question;
+use Q2aApi\Model\Post\Answer;
+use Q2aApi\Model\Post\Comment;
+use Q2aApi\Model\Post\Post;
+use Q2aApi\Model\User;
 use Q2aApi\Http\JsonResponse;
 use Q2aApi\Http\ResponseBodyFunctionInterface;
 use Q2aApi\Service\PostService;
@@ -22,16 +22,16 @@ class QuestionResponse extends JsonResponse implements ResponseBodyFunctionInter
     private $postService;
 
     /**
-     * @param QuestionDto $question
-     * @param AnswerDto[] $answers
-     * @param CommentDto[] $comments
+     * @param Question $question
+     * @param Answer[] $answers
+     * @param Comment[] $comments
      * @param array $favourites
      */
     public function __construct(
-        QuestionDto $question,
-        array $answers,
-        array $comments,
-        array $favourites = []
+        Question $question,
+        array    $answers,
+        array    $comments,
+        array    $favourites = []
     ) {
         $this->question = $question;
         $this->answers = $answers;
@@ -51,7 +51,7 @@ class QuestionResponse extends JsonResponse implements ResponseBodyFunctionInter
         );
     }
 
-    private function getPostKeys(PostDto $post): array
+    private function getPostKeys(Post $post): array
     {
         return [
             'id' => $post->getId(),
@@ -66,7 +66,7 @@ class QuestionResponse extends JsonResponse implements ResponseBodyFunctionInter
         ];
     }
 
-    private function getQuestionKeys(QuestionDto $question): array
+    private function getQuestionKeys(Question $question): array
     {
         return [
             'answers' => $this->getAnswers(),
@@ -87,7 +87,7 @@ class QuestionResponse extends JsonResponse implements ResponseBodyFunctionInter
         ];
     }
 
-    private function getAnswerKeys(AnswerDto $answer): array
+    private function getAnswerKeys(Answer $answer): array
     {
         return [
             'comments' => $this->getComments($answer),
@@ -95,7 +95,7 @@ class QuestionResponse extends JsonResponse implements ResponseBodyFunctionInter
         ];
     }
 
-    private function getUserKeys(?UserDto $user): ?array
+    private function getUserKeys(?User $user): ?array
     {
         if ($user === null) {
             return null;
@@ -123,7 +123,7 @@ class QuestionResponse extends JsonResponse implements ResponseBodyFunctionInter
         return array_values($answers);
     }
 
-    private function getComments(AnswerDto $answer): array
+    private function getComments(Answer $answer): array
     {
         $answerComments = array_filter($this->comments, function ($comment) use ($answer) {
             return $comment->getParentId() === $answer->getId();
@@ -136,7 +136,7 @@ class QuestionResponse extends JsonResponse implements ResponseBodyFunctionInter
         return array_values($comments);
     }
 
-    private function getTags(QuestionDto $question): array
+    private function getTags(Question $question): array
     {
         return array_map(function ($tag) {
             return [
@@ -146,7 +146,7 @@ class QuestionResponse extends JsonResponse implements ResponseBodyFunctionInter
         }, $question->getTags());
     }
 
-    private function getChange(PostDto $post): ?array
+    private function getChange(Post $post): ?array
     {
         $createEvents = ['question_created', 'answer_created', 'comment_created'];
         if (in_array($this->postService->getLatestActionType($post), $createEvents)) {

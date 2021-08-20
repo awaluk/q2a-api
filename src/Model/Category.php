@@ -1,10 +1,10 @@
 <?php
 
-namespace Q2aApi\Dto;
+namespace Q2aApi\Model;
 
 use Q2aApi\Helper\CategoryHelper;
 
-class CategoryDto implements DtoInterface
+class Category implements ModelInterface
 {
     protected $data;
 

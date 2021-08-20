@@ -1,10 +1,11 @@
 <?php
 
-namespace Q2aApi\Dto;
+namespace Q2aApi\Model\Post;
 
 use Q2aApi\Helper\QuestionHelper;
+use Q2aApi\Model\Category;
 
-class QuestionDto extends PostDto
+class Question extends Post
 {
     private $categoryDto;
 
@@ -12,7 +13,7 @@ class QuestionDto extends PostDto
     {
         parent::__construct($data);
 
-        $this->categoryDto = new CategoryDto([
+        $this->categoryDto = new Category([
             'categoryid' => $this->data['categoryid'],
             'title' => $this->data['categoryname'],
             'backpath' => $this->data['categorybackpath']
@@ -64,7 +65,7 @@ class QuestionDto extends PostDto
         return QuestionHelper::tagsStringToArray($this->data['tags']);
     }
 
-    public function getCategory(): CategoryDto
+    public function getCategory(): Category
     {
         return $this->categoryDto;
     }

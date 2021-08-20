@@ -2,7 +2,7 @@
 
 namespace Q2aApi\Service;
 
-use Q2aApi\Dto\UserDto;
+use Q2aApi\Model\User;
 
 class UserService
 {
@@ -11,7 +11,7 @@ class UserService
         require_once QA_INCLUDE_DIR . 'db/users.php';
     }
 
-    public function getById(?string $userId): ?UserDto
+    public function getById(?string $userId): ?User
     {
         if (empty($userId)) {
             return null;
@@ -23,10 +23,10 @@ class UserService
             return null;
         }
 
-        return new UserDto($userData);
+        return new User($userData);
     }
 
-    public function getByHandle(?string $handle): ?UserDto
+    public function getByHandle(?string $handle): ?User
     {
         if (empty($handle)) {
             return null;
