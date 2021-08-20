@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Q2aApi\Service;
+namespace Q2aApi\Service\Post;
 
 use Q2aApi\Model\Post\Post;
 use Q2aApi\Model\Post\Question;

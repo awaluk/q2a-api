@@ -1,6 +1,6 @@
 <?php
 
-namespace Q2aApi\Service;
+namespace Q2aApi\Service\Post;
 
 use Q2aApi\Base\Paginator;
 use Q2aApi\Helper\CategoryHelper;
@@ -8,7 +8,7 @@ use Q2aApi\Http\Request;
 
 class QuestionsListService
 {
-    public function getList(Request $request)
+    public function getList(Request $request): array
     {
         $userId = qa_get_logged_in_userid();
         $page = !empty($request->has('page')) ? (int)$request->get('page') : 1;
@@ -68,6 +68,30 @@ class QuestionsListService
             )),
             $paginator
         ];
+    }
+
+    public function getHomeList(): array
+    {
+        $userId = qa_get_logged_in_userid();
+        list($questions1, $questions2) = qa_db_select_with_pending(
+            qa_db_qs_selectspec($userId, 'created', 0, [], null, false, false, qa_opt_if_loaded('page_size_activity')),
+            qa_db_recent_a_qs_selectspec($userId, 0, [])
+        );
+
+        return qa_any_sort_and_dedupe(array_merge($questions1, $questions2));
+    }
+
+    public function getActivityList(): array
+    {
+        $userId = qa_get_logged_in_userid();
+        list($questions1, $questions2, $questions3, $questions4) = qa_db_select_with_pending(
+            qa_db_qs_selectspec($userId, 'created', 0, [], null, false, false, qa_opt_if_loaded('page_size_activity')),
+            qa_db_recent_a_qs_selectspec($userId, 0, []),
+            qa_db_recent_c_qs_selectspec($userId, 0, []),
+            qa_db_recent_edit_qs_selectspec($userId, 0, [])
+        );
+
+        return qa_any_sort_and_dedupe(array_merge($questions1, $questions2, $questions3, $questions4));
     }
 
     private function getSortField(string $field = null): string

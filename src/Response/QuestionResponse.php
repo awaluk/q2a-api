@@ -9,7 +9,7 @@ use Q2aApi\Model\Post\Post;
 use Q2aApi\Model\User;
 use Q2aApi\Http\JsonResponse;
 use Q2aApi\Http\ResponseBodyFunctionInterface;
-use Q2aApi\Service\PostService;
+use Q2aApi\Service\Post\PostService;
 use Q2aApi\Service\UserService;
 
 class QuestionResponse extends JsonResponse implements ResponseBodyFunctionInterface

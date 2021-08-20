@@ -6,7 +6,7 @@ use Q2aApi\Base\Paginator;
 use Q2aApi\Model\Post\Question;
 use Q2aApi\Http\JsonResponse;
 use Q2aApi\Http\ResponseBodyFunctionInterface;
-use Q2aApi\Service\PostService;
+use Q2aApi\Service\Post\PostService;
 
 class QuestionsListResponse extends JsonResponse implements ResponseBodyFunctionInterface
 {
